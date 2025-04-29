@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="container-children">
+    <div class="main-logo">
+      <img src="../../../assets/logo-samar.png" alt="logo-samar">
+    </div>
+    <span class="bem-vindo-texto">Seja bem vindo a rede hospitalar Samar, <br>por favor preencha corretamente os dados para usar a rede WI-FI.</span>
+    <form [formGroup]="cadastroPortalForm" class="formulario">
+      <mat-form-field class="nome" >
+        <mat-label class="nome-label">Nome</mat-label>
+        <input matInput formControlName="nome" class="nome-input">
+      </mat-form-field>
+      <mat-form-field class="sobrenome" >
+        <mat-label class="sobrenome-label">Sobrenome</mat-label>
+        <input matInput formControlName="sobrenome" class="sobrenome">
+      </mat-form-field>
+      <mat-form-field class="email" >
+        <mat-label class="email-label">E-mail</mat-label>
+        <input matInput formControlName="email" class="email">
+      </mat-form-field>
+      <mat-form-field class="telefone" >
+        <mat-label class="telefone-label">Telefone</mat-label>
+        <input matInput formControlName="telefone" class="telefone">
+      </mat-form-field>
+      <mat-checkbox formControlName="checkBox">Termos de uso</mat-checkbox>
+      <button mat-raised-button class="btn-enviar">Enviar</button>
+
+    </form>
+  </div>
+</div>

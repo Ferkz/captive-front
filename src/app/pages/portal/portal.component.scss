@@ -1,0 +1,53 @@
+$primarycolor: #00164a;
+$secondarycolor: #3dc4df;
+$whitecolor: #fff;
+.container{
+  text-align: center;
+  background-color: $secondarycolor;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+}
+.container-children{
+  background-color: $primarycolor;
+  width: 400px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+.bem-vindo-texto{
+  font-size: 20px;
+  margin: 10px;
+  padding: 10px;
+  color: $whitecolor;
+  width: 300px;
+
+}
+.formulario{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+}
+.nome, .sobrenome, .email, .telefone{
+  width: 300px;
+  color: $whitecolor;
+}
+mat-label{
+  color: $whitecolor;
+}
+mat-checkbox{
+  color: $whitecolor;
+}
+.btn-enviar{
+  width: 100%;
+  margin: 40px;
+}
+
