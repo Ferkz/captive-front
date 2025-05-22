@@ -1,53 +1,184 @@
+// src/app/features/user-registration/user-registration.component.scss
+
+// Suas variáveis
 $primarycolor: #00164a;
-$secondarycolor: #3dc4df;
+$secondarycolor: #3dc4df; // Usado como accent color no botão
 $whitecolor: #fff;
-.container{
+$errorcolor: #f44336; // Para mensagens de erro
+$successcolor: #4caf50; // Para mensagens de sucesso
+
+.container {
   text-align: center;
-  background-color: $secondarycolor;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-start; // Alterado para flex-start para ter espaço acima
   width: 100%;
-  height: 100vh;
+  min-height: 100vh; // min-height para ocupar a tela toda se o conteúdo for pequeno
   flex-direction: column;
+  padding-top: 20px; // Espaço no topo
+  box-sizing: border-box;
 }
-.container-children{
+
+.container-children {
   background-color: $primarycolor;
-  width: 400px;
+  width: 100%;
+  max-width: 450px; // Um pouco mais largo para conforto
   border-radius: 10px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   margin: 10px;
+  padding: 20px 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-.bem-vindo-texto{
-  font-size: 20px;
-  margin: 10px;
+
+.main-logo img {
+  max-width: 200px;
+  margin-bottom: 15px;
+}
+.bem-vindo-texto {
+  font-size: 1.1em;
+  margin-bottom: 20px;
   padding: 10px;
   color: $whitecolor;
-  width: 300px;
-
+  width: 100%;
+  max-width: 350px;
+  line-height: 1.5;
 }
-.formulario{
+.formulario {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex-direction: column;
-
-}
-.nome, .sobrenome, .email, .telefone{
-  width: 300px;
-  color: $whitecolor;
-}
-mat-label{
-  color: $whitecolor;
-}
-mat-checkbox{
-  color: $whitecolor;
-}
-.btn-enviar{
   width: 100%;
-  margin: 40px;
+  .form-field {
+    width: 100%;
+    margin-bottom: 5px;
+    ::ng-deep .mat-form-field-label {
+      color: $whitecolor !important;
+    }
+    ::ng-deep .mat-form-field-underline {
+      background-color: rgba($whitecolor, 0.7) !important;
+    }
+    ::ng-deep .mat-form-field-ripple {
+      background-color: $secondarycolor !important;
+    }
+    ::ng-deep .mat-input-element {
+      color: $whitecolor !important;
+
+    }
+    ::ng-deep .mat-form-field-outline-thick,
+    ::ng-deep .mat-form-field-outline {
+        color: rgba($whitecolor, 0.7) !important;
+    }
+    ::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+        color: $secondarycolor !important;
+    }
+     ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label { // Para outline
+      margin-top: -0.25em;
+    }
+  }
+  .terms-checkbox {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    ::ng-deep .mat-checkbox-layout .mat-checkbox-label {
+      color: $whitecolor;
+    }
+     ::ng-deep .mat-checkbox-frame {
+      border-color: rgba($whitecolor, 0.7);
+    }
+    ::ng-deep .mat-checkbox-checkmark-path {
+        stroke: $primarycolor !important;
+    }
+     ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+      background-color: rgba($secondarycolor, 0.26) !important;
+    }
+
+    a {
+      color: $secondarycolor;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .tou-error {
+        font-size: 0.75em;
+        color: lighten($errorcolor, 10%);
+        display: block;
+        margin-top: 3px;
+    }
+  }
+  .btn-enviar {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 12px 0;
+    font-size: 1.1em;
+  }
+  .error-message-box, .success-message-box {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    color: $whitecolor;
+    font-weight: 500;
+  }
+  .error-message-box {
+    background-color: rgba($errorcolor, 0.8);
+  }
+   .success-message-box {
+    background-color: rgba($successcolor, 0.8);
+    h3 {
+      margin-bottom: 10px;
+    }
+    p {
+      margin-bottom: 5px;
+    }
+  }
 }
 
+.spinner-border {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  border: .15em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: .75s linear infinite spinner-border-kf;
+  animation: .75s linear infinite spinner-border-kf;
+}
+.spinner-border-sm {
+  width: 0.8em;
+  height: 0.8em;
+  border-width: .15em;
+}
+@-webkit-keyframes spinner-border-kf { to { -webkit-transform: rotate(360deg); } }
+@keyframes spinner-border-kf { to { transform: rotate(360deg); } }
+
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  &.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+  &.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+   &.alert-info {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+  }
+}
+.mt-3 { margin-top: 1rem !important; }
+.mt-2 { margin-top: 0.5rem !important; }

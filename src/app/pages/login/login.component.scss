@@ -1,0 +1,227 @@
+$primarycolor: #00164a;
+$secondarycolor: #3dc4df;
+$whitecolor: #fff;
+.login-container {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 25px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: $primarycolor;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  .portal-header {
+    text-align: center;
+    margin-bottom: 25px;
+
+    .portal-logo {
+      max-width: 150px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      color: $secondarycolor;
+      font-size: 1.8em;
+      margin-bottom: 5px;
+    }
+
+    p {
+      color: #666;
+      font-size: 1em;
+    }
+  }
+  .loading-mac, .redirect-message {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+    .spinner-border {
+        margin-top: 10px;
+    }
+  }
+  form {
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: $whitecolor;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+
+        &.is-invalid {
+          border-color: #dc3545;
+        }
+      }
+
+      .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 0.25rem;
+        &.d-block {
+            display: block !important;
+        }
+      }
+    }
+
+    .form-check {
+        margin-bottom: 20px;
+        .form-check-input {
+            margin-right: 0.5em;
+             &.is-invalid {
+                border-color: #dc3545;
+                 + .form-check-label {
+                    color: #dc3545;
+                }
+            }
+        }
+        .form-check-label {
+            font-weight: normal;
+            color: #fff;
+            a {
+                color: $secondarycolor;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+
+    .device-info-box {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+      color: #555;
+
+      p {
+        margin-bottom: 3px;
+      }
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 10px 15px;
+      background-color: $secondarycolor;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: $secondarycolor;
+      }
+
+      .spinner-border { // Estilos para o spinner dentro do botão
+        margin-right: 8px; // Um pouco mais de espaço
+      }
+    }
+  }
+
+
+  .alert {
+    padding: 12px 15px; // Um pouco mais de padding
+    margin-bottom: 20px;
+    border-radius: 4px;
+    animation: slideInTop 0.4s ease-out; // Animação um pouco mais suave
+
+    &.alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    &.alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    &.alert-info { // Para a mensagem "Obtendo informações..."
+        background-color: #cce5ff;
+        color: #004085;
+        border: 1px solid #b8daff;
+    }
+  }
+
+
+  .portal-footer {
+    text-align: center;
+    font-size: 0.85em;
+    color: #fff;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+  }
+}
+
+// Animação (pode ficar fora do .login-container se preferir)
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-15px); // Um pouco menos de deslocamento
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.spinner-border {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: -0.125em;
+  border: .2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: .75s linear infinite spinner-border-kf; /* Renomeado keyframe */
+  animation: .75s linear infinite spinner-border-kf; /* Renomeado keyframe */
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: .2em;
+}
+
+.visually-hidden {
+  position: absolute!important;
+  width: 1px!important;
+  height: 1px!important;
+  padding: 0!important;
+  margin: -1px!important;
+  overflow: hidden!important;
+  clip: rect(0,0,0,0)!important;
+  white-space: nowrap!important;
+  border: 0!important;
+}
+
+@-webkit-keyframes spinner-border-kf { /* Renomeado keyframe */
+  to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner-border-kf {
+  to { transform: rotate(360deg); }
+}
+
+.me-2 { margin-right: 0.5rem !important; }
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.w-100 { width: 100% !important; }
+.d-block { display: block !important; }

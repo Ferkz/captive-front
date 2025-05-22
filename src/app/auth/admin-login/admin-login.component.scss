@@ -1,0 +1,109 @@
+$primary-color: #00164a;
+$accent-color: #3dc4df;
+$text-light: #f8f9fa;
+$text-dark: #343a40;
+$error-color: #dc3545;
+
+.admin-login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; // Um fundo suave
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-box {
+  background-color: $primary-color; // Fundo escuro para a caixa
+  color: $text-light;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+
+  .logo-container {
+    margin-bottom: 25px;
+    .login-logo {
+      max-width: 120px; // Ajuste conforme seu logo
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    p {
+      font-size: 0.95em;
+      color: lighten($text-light, 20%);
+    }
+  }
+
+  mat-form-field {
+    margin-bottom: 15px;
+    // Estilos para o Material Form Field em fundo escuro
+    ::ng-deep .mat-mdc-form-field-flex { // Para versões mais recentes do Material
+      background-color: rgba(255,255,255,0.05) !important;
+    }
+    ::ng-deep .mat-mdc-text-input-wrapper, // Para versões mais recentes
+    ::ng-deep .mat-form-field-flex {
+        background-color: rgba(255,255,255,0.05) !important; // Fundo do input
+    }
+     ::ng-deep .mat-form-field-outline-start,
+     ::ng-deep .mat-form-field-outline-gap,
+     ::ng-deep .mat-form-field-outline-end {
+        border-color: rgba($text-light, 0.3) !important; // Cor da borda do outline
+    }
+    ::ng-deep .mat-form-field-label,
+    ::ng-deep .mat-mdc-floating-label { // Para versões mais recentes
+      color: lighten($text-light, 10%) !important;
+    }
+    ::ng-deep input.mat-input-element,
+    ::ng-deep input.mat-mdc-input-element { // Para versões mais recentes
+      color: $text-light !important; // Cor do texto digitado
+      caret-color: $accent-color !important; // Cor do cursor
+    }
+    ::ng-deep .mat-form-field.mat-focused .mat-form-field-label,
+    ::ng-deep .mat-form-field.mat-focused .mat-mdc-floating-label.mat-focused, // Para versões mais recentes
+    ::ng-deep .mat-form-field .mat-form-field-label.mat-focused { // Para outline
+      color: $accent-color !important; // Cor do label quando focado
+    }
+     ::ng-deep .mat-form-field.mat-focused .mat-form-field-outline-thick,
+     ::ng-deep .mat-form-field.mat-focused .mat-mdc-form-field-outline-thick { // Para versões mais recentes
+      color: $accent-color !important; // Cor da borda quando focado
+    }
+    mat-icon {
+        color: rgba($text-light, 0.7);
+    }
+  }
+
+  .login-button {
+    margin-top: 20px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    background-color: $accent-color;
+    color: $primary-color; // Texto escuro no botão claro
+    &:hover:not(:disabled) {
+        background-color: darken($accent-color, 10%);
+    }
+  }
+
+  .alert-danger {
+    background-color: rgba($error-color, 0.15);
+    border: 1px solid rgba($error-color, 0.5);
+    color: lighten($error-color, 10%);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+}
+
+// Classes utilitárias (se não estiverem globais)
+.w-100 { width: 100% !important; }
+.mt-2 { margin-top: 0.5rem !important; }
+.me-2 { margin-right: 0.5rem !important; }
+
+.spinner-border { /* ... (copie do SCSS anterior se não estiver global) ... */ }
+.spinner-border-sm { /* ... (copie do SCSS anterior se não estiver global) ... */ }

@@ -1,0 +1,26 @@
+$primarycolor: #00164a;
+$secondarycolor: #3dc4df;
+$whitecolor: #fff;
+
+.container{
+   max-width: 400px;
+  margin: 30px auto;
+  padding: 25px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: $primarycolor;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+.main-content{
+  background-color: #00164a;
+  width: 400px;
+  align-items: center;
+  color: $whitecolor;
+  text-align: center;
+}
+.btn{
+  background-color: $secondarycolor;
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+}

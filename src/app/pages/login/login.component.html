@@ -1,0 +1,73 @@
+<div class="login-container">
+  <div class="portal-header">
+    <img src="../../../assets/logo-samar.png" alt="Logo da Empresa" class="portal-logo"> <h2>Bem-vindo ao Portal Wi-Fi</h2>
+    <p>Faça login para acessar a internet.</p>
+  </div>
+  <div *ngIf="!clientMac && !errorMessage" class="loading-mac alert alert-info">
+    <p>Obtendo informações do seu dispositivo...</p>
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *ngIf="clientMac || errorMessage">
+    <div *ngIf="errorMessage" class="alert alert-danger slide-in-top">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success slide-in-top">
+      {{ successMessage }}
+    </div>
+
+    <ng-container *ngIf="!successMessage">
+      <div class="form-group">
+        <label for="username">Email:</label>
+        <input type="email" id="username" formControlName="username" class="form-control"
+               placeholder="seuemail@exemplo.com"
+               [ngClass]="{ 'is-invalid': f['username'].invalid && (f['username'].dirty || f['username'].touched) }">
+        <div *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+          <div *ngIf="f['username'].errors?.['required']">Email é obrigatório.</div>
+          <div *ngIf="f['username'].errors?.['email']">Por favor, insira um email válido.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" formControlName="password" class="form-control"
+               placeholder="Sua senha"
+               [ngClass]="{ 'is-invalid': f['password'].invalid && (f['password'].dirty || f['password'].touched) }">
+        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+          <div *ngIf="f['password'].errors?.['required']">Senha é obrigatória.</div>
+          <div *ngIf="f['password'].errors?.['minlength']">Senha deve ter pelo menos 6 caracteres.</div>
+        </div>
+      </div>
+
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="acceptTou" formControlName="acceptTou"
+               [ngClass]="{ 'is-invalid': showTouError && !touAccepted }">
+        <label class="form-check-label" for="acceptTou">
+          Eu li e aceito os <a href="/termos-de-uso" target="_blank">Termos de Uso</a>.
+        </label>
+        <div *ngIf="showTouError && !touAccepted" class="invalid-feedback d-block">
+          Você deve aceitar os Termos de Uso para continuar.
+        </div>
+      </div>
+
+      <div class="form-group device-info-box" *ngIf="clientMac">
+        <p><small>Conectando como: {{ clientMac }}</small></p>
+        <p *ngIf="ssid"><small>Rede: {{ ssid }}</small></p>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading || !loginForm.valid || !clientMac">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        {{ isLoading ? 'Autenticando...' : 'Acessar Internet' }}
+      </button>
+    </ng-container>
+  </form>
+
+  <div *ngIf="successMessage" class="redirect-message alert alert-info">
+    <p>Você será redirecionado em breve...</p>
+    <div class="spinner-border text-primary mt-2" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

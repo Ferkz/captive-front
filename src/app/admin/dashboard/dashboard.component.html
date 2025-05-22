@@ -1,0 +1,74 @@
+<div class="dashboard-container">
+  <h1>Dashboard Administrativo</h1>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    <p>Carregando dados do dashboard...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading && !error" class="dashboard-grid">
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>Sessões Ativas</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A' }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card" *ngIf="dashboardData.systemInfo">
+      <mat-card-header>
+        <mat-card-title>Info do Sistema</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
+        <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
+        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{ dashboardData.systemInfo.operatingSystemVersion }}</p>
+        <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card" *ngIf="dashboardData.systemMemory">
+      <mat-card-header>
+        <mat-card-title>Uso de Memória do Servidor</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Usada:</strong> {{ formatBytes(dashboardData.systemMemory.used) }}</p>
+        <p><strong>Livre:</strong> {{ formatBytes(dashboardData.systemMemory.free) }}</p>
+        <p><strong>Total Alocada:</strong> {{ formatBytes(dashboardData.systemMemory.total) }}</p>
+        <p><strong>Máxima:</strong> {{ formatBytes(dashboardData.systemMemory.max) }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card" *ngIf="dashboardData.osCounts && dashboardData.osCounts.length > 0">
+      <mat-card-header>
+        <mat-card-title>Sessões por Sistema Operacional</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li *ngFor="let item of dashboardData.osCounts">
+            {{ item.os || item.name }}: {{ item.quantity }}
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+
+     <mat-card class="dashboard-card" *ngIf="dashboardData.browserCounts && dashboardData.browserCounts.length > 0">
+      <mat-card-header>
+        <mat-card-title>Sessões por Navegador</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li *ngFor="let item of dashboardData.browserCounts">
+            {{ item.browser || item.name }}: {{ item.quantity }}
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

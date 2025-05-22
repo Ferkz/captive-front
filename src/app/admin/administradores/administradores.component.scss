@@ -1,0 +1,74 @@
+.admin-page-container {
+  padding: 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.8em;
+  }
+}
+
+.filter-field {
+  width: 100%;
+  max-width: 400px; // Limita a largura do campo de filtro
+  margin-bottom: 20px;
+}
+
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #555;
+  mat-progress-spinner {
+    margin-bottom: 15px;
+  }
+}
+
+.table-container {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.admin-table { // Classe específica para esta tabela
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  padding: 8px 12px;
+}
+
+td.mat-cell button {
+  margin-right: 4px; // Menos espaço entre botões de ação
+}
+
+.alert {
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  &.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+  &.alert-info {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+  }
+}
+
+td.mat-cell mat-icon[color="primary"] { // Ativo
+  // A cor 'primary' do tema será usada
+}
+td.mat-cell mat-icon[color="warn"] { // Inativo
+
+}
