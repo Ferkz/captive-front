@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router  } from '@angular/router';
+import { ActivatedRoute, Router, Params  } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -18,6 +18,7 @@ export class PortalComponent implements OnInit {
   successMessage: string | null = null;
 
   // Query params do UniFi
+  unifiOriginalParams: Params = {};
   clientMacFromUrl: string | null = null;
   apMacFromUrl: string | null = null;
   originalRedirectUrl: string | null = null;
@@ -36,9 +37,7 @@ export class PortalComponent implements OnInit {
       nome: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       sobrenome: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      telefone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-()]{10,20}$/)]], // Pattern mais flexível para telefone
-      // O checkbox de termos de uso não está no seu HTML mais recente, mas é recomendado.
-      // Se adicionar, inclua no formGroup:
+      telefone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-()]{10,20}$/)]], // Pattern
       acceptTou: [false, Validators.requiredTrue]
     });
   }
@@ -47,8 +46,10 @@ export class PortalComponent implements OnInit {
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(params => {
-        this.clientMacFromUrl = params['mac'] || params['client_mac'] || null;
-        this.apMacFromUrl = params['ap'] || params['ap_mac'] || null;
+        console.log('PortalComponent (Cadastro) - Query params recebidos:', params);
+        this.unifiOriginalParams = { ...params };
+        this.clientMacFromUrl = params['mac'] || params['client_mac'] || params ['id'] || null;
+        this.apMacFromUrl = params['ap'] || params['ap_mac'] ||null;
         this.originalRedirectUrl = params['url'] || params['redirect'] || null;
 
         if (!this.clientMacFromUrl) {

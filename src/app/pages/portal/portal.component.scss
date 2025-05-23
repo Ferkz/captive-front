@@ -1,28 +1,31 @@
-// src/app/features/user-registration/user-registration.component.scss
-
-// Suas variáveis
 $primarycolor: #00164a;
-$secondarycolor: #3dc4df; // Usado como accent color no botão
+$secondarycolor: #3dc4df;
 $whitecolor: #fff;
-$errorcolor: #f44336; // Para mensagens de erro
-$successcolor: #4caf50; // Para mensagens de sucesso
+$errorcolor: #f44336;
+$successcolor: #4caf50;
 
 .container {
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: flex-start; // Alterado para flex-start para ter espaço acima
+  justify-content: flex-start;
   width: 100%;
-  min-height: 100vh; // min-height para ocupar a tela toda se o conteúdo for pequeno
+  min-height: 100vh;
   flex-direction: column;
-  padding-top: 20px; // Espaço no topo
+  padding-top: 20px;
   box-sizing: border-box;
+  @media (max-width:600px) {
+    width: 80%;
+    justify-content: center;
+    margin: 5px;
+
+  }
 }
 
 .container-children {
   background-color: $primarycolor;
   width: 100%;
-  max-width: 450px; // Um pouco mais largo para conforto
+  max-width: 450px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -77,6 +80,9 @@ $successcolor: #4caf50; // Para mensagens de sucesso
     }
      ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label { // Para outline
       margin-top: -0.25em;
+    }
+    input::placeholder{
+      color: #fff;
     }
   }
   .terms-checkbox {

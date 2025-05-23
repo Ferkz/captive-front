@@ -1,12 +1,25 @@
-<div class="container">
-<div class="main-content">
+<div class="container"> <div class="container-children">
     <div class="main-logo">
-      <img src="../../../assets/logo-samar.png" alt="logo-samar">
-    </div>
-  <span class="bem-vindo-texto">Seja bem vindo à rede hospitalar Samar, <br>por favor preencha corretamente os dados <br> usar a rede WI-FI.</span>
-  <p>Para usar a rede WIFI, inicie seu login ou cadastre-se</p>
+      <img src="assets/logo-samar.png" alt="logo-samar"> </div>
+    <span class="bem-vindo-texto">
+      Seja bem vindo à rede hospitalar Samar,<br>
+      por favor preencha corretamente os dados para usar a rede WI-FI.
+    </span>
+    <span class="instrucao-texto">
+      Para usar a rede WIFI, inicie seu login ou cadastre-se
+    </span>
 
-  <button mat-button class="btn" routerLink="/login"><mat-icon>login</mat-icon>login</button>
-  <button mat-button class="btn" routerLink="/cadastro"><mat-icon>person_add</mat-icon>Cadatre-se</button>
-</div>
+    <div class="botoes-container">
+      <button mat-flat-button color="primary" class="btn-opcao" (click)="navigateToGuestLogin()">
+        <mat-icon>login</mat-icon> Login
+      </button>
+      <button mat-flat-button color="accent" class="btn-opcao" (click)="navigateToGuestRegistration()">
+        <mat-icon>person_add</mat-icon> Cadastre-se
+      </button>
+    </div>
+
+    <div *ngIf="clientMac" style="color: white; font-size: 0.7em; margin-top: 10px; opacity: 0.7;">
+      <p>Debug: MAC={{clientMac}}, AP={{apMac}}, SSID={{ssid}}, URL={{originalRedirectUrl}}</p>
+    </div>
+  </div>
 </div>

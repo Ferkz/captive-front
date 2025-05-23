@@ -2,7 +2,7 @@ import { CaptivePortalService, CaptiveLoginRequest, BackendPortalResponse } from
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
+  unifiOriginalParams: Params = {};
   clientMac: string | null = null;
   accessPointMac: string | null = null;
   ssid: string | null = null;
@@ -44,7 +45,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(params => {
-        this.clientMac = params['mac'] || params['client_mac'] || null;
+
+        console.log('PortalComponent (Cadastro) - Query params recebidos:', params);
+        this.unifiOriginalParams = { ...params };
+        this.clientMac = params['mac'] || params['client_mac'] || params['id'] ||null;
         this.accessPointMac = params['ap'] || params['ap_mac'] || null;
         this.ssid = params['ssid'] || null;
         // UniFi pode enviar a URL original como 'url', 'redirect', ou 'original_url'
@@ -103,9 +107,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       mac: this.clientMac,
       ap: this.accessPointMac || undefined,
       ssid: this.ssid || undefined
-      // O backend CaptivePortalController espera username, password, mac, ap, ssid como @RequestParam
-      // O acceptTou é validado no frontend e o backend também tem uma verificação para isso
-      // no seu DTO AuthorizeDeviceRequestDTO, mas o controller que estamos usando não recebe esse DTO diretamente.
     };
 
     this.captivePortalService.login(requestData)
@@ -113,8 +114,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: BackendPortalResponse) => {
           this.isLoading = false;
-          // Seu backend retorna SuccessResponseDTO com um campo 'payload' que contém o objeto de resposta
-          if (response && response.payload && response.payload.message) { // Ajustado para sua estrutura SuccessResponseDTO
+          if (response && response.payload && response.payload.message) { // Ajustado para estrutura SuccessResponseDTO
               this.successMessage = response.payload.message || 'Login bem-sucedido! Acesso à internet liberado.';
               console.log('Login successful, UniFi authorized.', response);
           } else {

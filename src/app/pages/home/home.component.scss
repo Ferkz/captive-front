@@ -1,26 +1,96 @@
 $primarycolor: #00164a;
 $secondarycolor: #3dc4df;
 $whitecolor: #fff;
+$buttontextcolor: #fff;
+$primarybuttontextcolor: #00164a;
 
-.container{
-   max-width: 400px;
-  margin: 30px auto;
-  padding: 25px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: $primarycolor;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-.main-content{
-  background-color: #00164a;
-  width: 400px;
+.container {
+  display: flex;
   align-items: center;
-  color: $whitecolor;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.container-children {
+  background-color: $primarycolor;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 40px 40px 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   text-align: center;
 }
-.btn{
-  background-color: $secondarycolor;
-  margin-top: 10px;
-  display: flex;
+
+.main-logo img {
+  max-width: 200px;
+  margin-bottom: 25px;
+}
+
+.bem-vindo-texto {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: $whitecolor;
+  line-height: 1.5;
+  max-width: 90%;
+}
+.instrucao-texto {
+  font-size: 1em;
+  margin-bottom: 35px;
+  color: lighten($whitecolor, 15%);
+  max-width: 90%;
+}
+.botoes-container {
   width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .btn-opcao {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+
+    mat-icon {
+      margin-right: 10px;
+    }
+    &.mat-primary {
+    }
+    &.mat-accent {
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+     &:active {
+        transform: translateY(0px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+}
+.debug-info {
+  color: rgba($whitecolor, 0.7);
+  font-size: 0.8em;
+  margin-top: 20px;
+  opacity: 0.8;
+  p {
+    margin: 2px 0;
+  }
 }
