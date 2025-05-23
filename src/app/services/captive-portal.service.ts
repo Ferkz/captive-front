@@ -1,4 +1,4 @@
-// src/app/services/captive-portal.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 // Exemplo: import { environment } from '../../environments/environment';
 // const CAPTIVE_PORTAL_BASE_URL = environment.captivePortalBaseUrl;
 // Por enquanto, vamos definir diretamente:
-const CAPTIVE_PORTAL_BASE_URL = 'http://localhost:8080/captive/portal'; // Ajuste se o seu backend estiver em outro lugar
+const CAPTIVE_PORTAL_BASE_URL = 'http://10.0.0.71:8080/captive/portal'; // Ajuste se o seu backend estiver em outro lugar
 
 export interface CaptiveLoginRequest {
   username?: string; // No seu backend, o controller espera 'username'
@@ -17,8 +17,6 @@ export interface CaptiveLoginRequest {
   ap?: string;
   ssid?: string;
 }
-
-// Interface para a resposta esperada do backend (baseado no seu SuccessResponseDTO e ErrorResponseDTO)
 export interface BackendPortalResponse {
   responseId?: number; // Do GenericResponseDTO
   responseDescription?: string; // Do GenericResponseDTO

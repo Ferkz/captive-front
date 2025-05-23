@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Logs, BackendAccessLogResponse } from '../interfaces/logs';
 
-const ACCESS_LOG_API_BASE_URL = 'http://localhost:8080/api/admin/accessLogs'; // Endpoint do AccessLogController
+const ACCESS_LOG_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/accessLogs'; // Endpoint do AccessLogController
 
 @Injectable({
   providedIn: 'root'

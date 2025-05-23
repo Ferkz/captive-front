@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Session, SessionPatchData, BackendSessionResponse } from '../interfaces/session';
 
-const SESSION_API_BASE_URL = 'http://localhost:8080/api/admin/sessions';
+const SESSION_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/sessions';
 
 @Injectable({
   providedIn: 'root'

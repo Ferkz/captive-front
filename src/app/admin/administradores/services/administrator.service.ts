@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Administrator, BackendAdminResponse } from '../interfaces/administrator';
 
 // O JwtInterceptor já adiciona o token JWT para /api/admin/**
-const ADMIN_API_BASE_URL = 'http://localhost:8080/api/admin/administrators';
+const ADMIN_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/administrators';
 
 @Injectable({
   providedIn: 'root'

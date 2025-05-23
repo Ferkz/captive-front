@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angula
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-const GUEST_PORTAL_BASE_URL = 'http://localhost:8080/portal/guest';
+const GUEST_PORTAL_BASE_URL = 'http://10.0.0.71:8080/portal/guest';
 
 export interface GuestRegistrationData{
   fullName: string,

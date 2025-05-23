@@ -39,7 +39,7 @@ export interface AdminDashboardData {
   totalSessionsCount?: number;
 }
 
-const INFO_API_BASE_URL = 'http://localhost:8080/api/admin/info';
+const INFO_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/info';
 
 @Component({
   selector: 'app-dashboard',
