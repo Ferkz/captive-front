@@ -1,18 +1,20 @@
-// Seu AppRoutingModule
-import { AuthModule } from './auth/auth.module'; // AuthModule é importado, então suas rotas são eager
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { PortalComponent } from './pages/portal/portal.component';
-import { HomeComponent } from './pages/home/home.component';       // Tela inicial do UniFi redirect
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
-  {path:'',component:HomeComponent}, // Rota raiz, alvo do redirect do UniFi
+  {path:'',component:HomeComponent},
   {path:'cadastro',component: PortalComponent},
   {path:'login',component:LoginComponent},
   {
-    path: 'administrator', // <<< ADICIONAR UM PATH PARA ADMIN
+    path: 'administrator',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   { path: '**', redirectTo: '' }
 ];

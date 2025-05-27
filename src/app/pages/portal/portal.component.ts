@@ -14,10 +14,9 @@ import { GuestRegistrationService, GuestRegistrationData, GuestRegistrationRespo
 export class PortalComponent implements OnInit {
   cadastroPortalForm: FormGroup;
   isLoading = false;
-  erro: string | null = null; // Para a variável {{erro}} no seu HTML
+  erro: string | null = null; //
   successMessage: string | null = null;
 
-  // Query params do UniFi
   unifiOriginalParams: Params = {};
   clientMacFromUrl: string | null = null;
   apMacFromUrl: string | null = null;
@@ -103,7 +102,7 @@ export class PortalComponent implements OnInit {
       .subscribe({
         next: (response: GuestRegistrationResponse) => {
           this.isLoading = false;
-          if (response && response.responseId === 200) { // Assumindo que seu SuccessResponseDTO usa responseId
+          if (response && response.responseId === 200) {
             this.successMessage = response.payload as string || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
             this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
             this.cadastroPortalForm.disable();

@@ -28,7 +28,7 @@
 
       <mat-form-field class="form-field telefone" appearance="outline">
         <mat-label class="telefone-label">Telefone</mat-label>
-        <input matInput type="tel" formControlName="telefone" placeholder="(XX) XXXXX-XXXX ou XXXXXXXX">
+        <input matInput type="tel" formControlName="telefone" placeholder="(XX) XXXXX-XXXX">
          <mat-error *ngIf="f['telefone'].hasError('required')">Telefone é obrigatório.</mat-error>
          <mat-error *ngIf="f['telefone'].hasError('pattern')">Formato de telefone inválido.</mat-error>
       </mat-form-field>
