@@ -1,43 +1,73 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-// Defina a URL base do seu backend. Idealmente, isso viria de um arquivo de ambiente.
+// Defina as URLs base do seu backend. Idealmente, isso viria de um arquivo de ambiente.
 // Exemplo: import { environment } from '../../environments/environment';
-// const CAPTIVE_PORTAL_BASE_URL = environment.captivePortalBaseUrl;
+// const BACKEND_BASE_URL = environment.backendBaseUrl;
 // Por enquanto, vamos definir diretamente:
-const CAPTIVE_PORTAL_BASE_URL = 'http://10.0.0.71:8080/captive/portal'; // Ajuste se o seu backend estiver em outro lugar
+const BACKEND_BASE_URL = 'http://10.0.0.71:8080'; // Ajuste se o seu backend estiver em outro lugar
 
+// --- Interfaces para Comunicação com o Backend ---
+
+// Interface para o Login Tradicional do Portal Cativo (username/password)
 export interface CaptiveLoginRequest {
-  username?: string; // No seu backend, o controller espera 'username'
+  username?: string;
   password?: string;
   mac: string;
   ap?: string;
   ssid?: string;
 }
-export interface BackendPortalResponse {
-  responseId?: number; // Do GenericResponseDTO
-  responseDescription?: string; // Do GenericResponseDTO
-  payload?: any; // Do SuccessResponseDTO (pode conter o objeto com message, mac_address, etc.)
-  errorDescription?: string; // Do ErrorResponseDTO
+
+// Interface para o Registro de Convidado (sem senha)
+export interface GuestRegistrationRequest {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  deviceMac: string;
+  deviceIp?: string; // Preenchido no backend
+  accessPointMac?: string;
+  browser?: string; // Preenchido no backend
+  operatingSystem?: string; // Preenchido no backend
+  acceptTou: boolean;
 }
 
+// Interface para o Login de Convidado (apenas email e mac)
+export interface GuestLoginRequest {
+  email: string;
+  deviceMac: string;
+  accessPointMac?: string;
+}
+
+// Interface para a Resposta Padrão do Backend (SuccessResponseDTO/ErrorResponseDTO)
+export interface BackendPortalResponse {
+  response?: number; // Do GenericResponseDTO (responseId)
+  description?: string; // Do GenericResponseDTO (responseDescription)
+  payload?: any; // Do SuccessResponseDTO (pode conter o objeto com message, mac_address, etc.)
+  errorDescription?: string; // Do ErrorResponseDTO (para erros específicos)
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CaptivePortalService {
-  private portalLoginUrl = `${CAPTIVE_PORTAL_BASE_URL}/login`;
-  private portalLogoutUrl = `${CAPTIVE_PORTAL_BASE_URL}/logout`; // Endpoint de logout
+  // Endpoints para o fluxo de login/logout com username/password
+  private captivePortalLoginUrl = `${BACKEND_BASE_URL}/captive/portal/login`;
+  private captivePortalLogoutUrl = `${BACKEND_BASE_URL}/captive/portal/logout`;
+
+  // Endpoints para o fluxo de registro e login de convidados (sem password)
+  private guestRegisterUrl = `${BACKEND_BASE_URL}/portal/guest/register-and-authorize`;
+  private guestLoginUrl = `${BACKEND_BASE_URL}/portal/guest/login`;
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Método para o login tradicional do portal cativo (com username e password).
+   * @param loginData Dados de login (username, password, mac, etc.).
+   * @returns Observable da resposta do backend.
+   */
   login(loginData: CaptiveLoginRequest): Observable<BackendPortalResponse> {
-    // O backend CaptivePortalController espera os dados como @RequestParam,
-    // o que se traduz em 'application/x-www-form-urlencoded' para POST.
-    // HttpParams constrói corretamente essa query string para o corpo.
     let params = new HttpParams();
     if (loginData.username) {
       params = params.set('username', loginData.username);
@@ -54,25 +84,64 @@ export class CaptivePortalService {
       params = params.set('ssid', loginData.ssid);
     }
 
-    // Para POST com x-www-form-urlencoded, o corpo são os params e o header Content-Type é definido automaticamente
-    // pelo Angular quando o segundo argumento do post() é HttpParams.
-    return this.http.post<BackendPortalResponse>(this.portalLoginUrl, params)
+    return this.http.post<BackendPortalResponse>(this.captivePortalLoginUrl, params)
       .pipe(
-        tap(response => console.log('Resposta do login do portal:', response)),
+        tap(response => console.log('Resposta do login do portal (username/password):', response)),
         catchError(this.handleError)
       );
   }
 
+  /**
+   * Método para o registro de um novo convidado.
+   * Envia os dados como JSON para o backend.
+   * @param registrationData Dados do registro do convidado.
+   * @returns Observable da resposta do backend.
+   */
+  registerGuest(registrationData: GuestRegistrationRequest): Observable<BackendPortalResponse> {
+    // O backend espera um @RequestBody, então enviamos o objeto JSON diretamente.
+    return this.http.post<BackendPortalResponse>(this.guestRegisterUrl, registrationData)
+      .pipe(
+        tap(response => console.log('Resposta do registro de convidado:', response)),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Método para o login de um convidado já registrado (re-autenticação/liberação).
+   * Envia os dados como JSON para o backend.
+   * @param loginData Dados de login do convidado (email, mac).
+   * @returns Observable da resposta do backend.
+   */
+  guestLogin(loginData: GuestLoginRequest): Observable<BackendPortalResponse> {
+    // O backend espera um @RequestBody, então enviamos o objeto JSON diretamente.
+    return this.http.post<BackendPortalResponse>(this.guestLoginUrl, loginData)
+      .pipe(
+        tap(response => console.log('Resposta do login de convidado (email/mac):', response)),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Método para realizar o logout de um dispositivo do portal cativo.
+   * @param macAddress Endereço MAC do dispositivo a ser desautorizado.
+   * @returns Observable da resposta do backend.
+   */
   logout(macAddress: string): Observable<BackendPortalResponse> {
     let params = new HttpParams().set('mac', macAddress);
 
-    return this.http.post<BackendPortalResponse>(this.portalLogoutUrl, params)
+    return this.http.post<BackendPortalResponse>(this.captivePortalLogoutUrl, params)
       .pipe(
         tap(response => console.log('Resposta do logout do portal:', response)),
         catchError(this.handleError)
       );
   }
 
+  /**
+   * Manipulador de erros HTTP.
+   * Extrai a mensagem de erro da resposta do backend.
+   * @param error O erro HTTP.
+   * @returns Observable que lança o erro.
+   */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Ocorreu um erro desconhecido!';
     if (error.error instanceof ErrorEvent) {
@@ -86,13 +155,12 @@ export class CaptivePortalService {
         `corpo do erro: ${JSON.stringify(error.error)}`);
 
       // Tentando extrair a mensagem de erro da sua estrutura ErrorResponseDTO
-      if (error.error && error.error.errorDescription) {
-          errorMessage = `${error.error.responseDescription || 'Erro'}: ${error.error.errorDescription}`;
+      if (error.error && error.error.description) { // 'description' é o responseDescription
+        errorMessage = `${error.error.description}: ${error.error.payload || error.error.errorDescription || ''}`;
       } else if (error.error && typeof error.error === 'string') {
         errorMessage = error.error; // Caso o backend retorne uma string simples de erro
-      }
-       else {
-          errorMessage = `Erro ${error.status}: ${error.message}`;
+      } else {
+        errorMessage = `Erro ${error.status}: ${error.message}`;
       }
     }
     return throwError(() => new Error(errorMessage));

@@ -1,7 +1,8 @@
 $primarycolor: #00164a;
 $secondarycolor: #3dc4df;
 $whitecolor: #fff;
-.login-container {
+
+.guest-login-container { // Renomeado para corresponder ao HTML do LoginComponent
   max-width: 400px;
   margin: 30px auto;
   padding: 25px;
@@ -9,34 +10,36 @@ $whitecolor: #fff;
   border-radius: 8px;
   background-color: $primarycolor;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  .portal-header {
+  color: $whitecolor; // Cor do texto geral para o contêiner principal
+  @media (max-width:500px) {
+    margin: 10px;
+
+  }
+
+  .logo-area { // Estilos para a área da logo
     text-align: center;
     margin-bottom: 25px;
 
-    .portal-logo {
+    .logo { // Estilos para a imagem da logo
       max-width: 150px;
       margin-bottom: 15px;
     }
-
-    h2 {
-      color: $secondarycolor;
-      font-size: 1.8em;
-      margin-bottom: 5px;
-    }
-
-    p {
-      color: #666;
-      font-size: 1em;
-    }
   }
-  .loading-mac, .redirect-message {
+
+  h2 { // Estilos para o título principal do formulário
+    color: $secondarycolor;
+    font-size: 1.8em;
+    margin-bottom: 15px;
     text-align: center;
-    padding: 20px;
-    color: #555;
-    .spinner-border {
-        margin-top: 10px;
-    }
   }
+
+  p { // Estilos para parágrafos informativos
+    color: $whitecolor;
+    font-size: 1em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
   form {
     .form-group {
       margin-bottom: 15px;
@@ -53,6 +56,8 @@ $whitecolor: #fff;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
+        background-color: lighten($primarycolor, 10%); // Fundo mais claro para os inputs
+        color: $whitecolor; // Cor do texto dentro dos inputs
 
         &.is-invalid {
           border-color: #dc3545;
@@ -69,50 +74,10 @@ $whitecolor: #fff;
       }
     }
 
-    .form-check {
-        margin-bottom: 20px;
-        .form-check-input {
-            margin-right: 0.5em;
-             &.is-invalid {
-                border-color: #dc3545;
-                 + .form-check-label {
-                    color: #dc3545;
-                }
-            }
-        }
-        .form-check-label {
-            font-weight: normal;
-            color: #fff;
-            a {
-                color: $secondarycolor;
-                text-decoration: none;
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
-
-
-    .device-info-box {
-      background-color: #f8f9fa;
-      border: 1px solid #e9ecef;
-      padding: 10px;
-      border-radius: 4px;
-      margin-top: 15px;
-      margin-bottom: 20px;
-      font-size: 0.9em;
-      color: #555;
-
-      p {
-        margin-bottom: 3px;
-      }
-    }
-
     .btn-primary {
       width: 100%;
       padding: 10px 15px;
-      background-color: $secondarycolor;
+      background-color: #ff4081;
       border: none;
       border-radius: 4px;
       color: white;
@@ -126,21 +91,20 @@ $whitecolor: #fff;
       }
 
       &:hover:not(:disabled) {
-        background-color: $secondarycolor;
+        background-color: darken($secondarycolor, 10%); // Escurece no hover
       }
 
       .spinner-border { // Estilos para o spinner dentro do botão
-        margin-right: 8px; // Um pouco mais de espaço
+        margin-right: 8px;
       }
     }
   }
 
-
   .alert {
-    padding: 12px 15px; // Um pouco mais de padding
+    padding: 12px 15px;
     margin-bottom: 20px;
     border-radius: 4px;
-    animation: slideInTop 0.4s ease-out; // Animação um pouco mais suave
+    animation: slideInTop 0.4s ease-out;
 
     &.alert-danger {
       background-color: #f8d7da;
@@ -153,35 +117,42 @@ $whitecolor: #fff;
       color: #155724;
       border: 1px solid #c3e6cb;
     }
-    &.alert-info { // Para a mensagem "Obtendo informações..."
-        background-color: #cce5ff;
-        color: #004085;
-        border: 1px solid #b8daff;
+    &.alert-warning { // Para a mensagem de aviso do MAC address
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
     }
   }
 
-
-  .portal-footer {
+  // Estilos para o link "Ainda não tem cadastro?" no rodapé do formulário
+  .mt-3 {
     text-align: center;
-    font-size: 0.85em;
-    color: #fff;
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
+    p {
+      margin-top: 1rem;
+      color: $whitecolor;
+    }
+    a {
+      color: $secondarycolor;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
-// Animação (pode ficar fora do .login-container se preferir)
+// Animações e classes utilitárias (fora do contêiner principal)
 @keyframes slideInTop {
   from {
     opacity: 0;
-    transform: translateY(-15px); // Um pouco menos de deslocamento
+    transform: translateY(-15px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .spinner-border {
   display: inline-block;
   width: 1rem;
@@ -190,8 +161,8 @@ $whitecolor: #fff;
   border: .2em solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
-  -webkit-animation: .75s linear infinite spinner-border-kf; /* Renomeado keyframe */
-  animation: .75s linear infinite spinner-border-kf; /* Renomeado keyframe */
+  -webkit-animation: .75s linear infinite spinner-border-kf;
+  animation: .75s linear infinite spinner-border-kf;
 }
 
 .spinner-border-sm {
@@ -212,7 +183,7 @@ $whitecolor: #fff;
   border: 0!important;
 }
 
-@-webkit-keyframes spinner-border-kf { /* Renomeado keyframe */
+@-webkit-keyframes spinner-border-kf {
   to { -webkit-transform: rotate(360deg); }
 }
 
@@ -222,6 +193,5 @@ $whitecolor: #fff;
 
 .me-2 { margin-right: 0.5rem !important; }
 .mt-2 { margin-top: 0.5rem !important; }
-.mt-3 { margin-top: 1rem !important; }
 .w-100 { width: 100% !important; }
 .d-block { display: block !important; }
