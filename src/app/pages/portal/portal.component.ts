@@ -101,38 +101,37 @@ export class PortalComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: GuestRegistrationResponse) => {
           this.isLoading = false;
-          // --- AJUSTE A LÓGICA DE TRATAMENTO DE RESPOSTA AQUI ---
-          if (response && response.responseId === 200) {
-            // Verifica se a descrição indica que a sessão já estava ativa
-            if (response.responseDescription === "Already Active") {
-              this.successMessage = response.payload as string || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
+        if(response && response.responseId ===200){
+          const descriptionLower = response.responseDescription?.trim().toLowerCase();
+          if(descriptionLower ==="already active"){
+              this.successMessage = (response.payload as string) || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
               this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
               this.cadastroPortalForm.disable();
               setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
-            } else if (response.responseDescription === "Registration Updated") {
-              this.successMessage = response.payload as string || 'Cadastro atualizado e acesso à internet liberado!';
+          } else if (descriptionLower === "registration updated") {
+              this.successMessage = (response.payload as string) || 'Cadastro atualizado e acesso à internet liberado!';
+              this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
+              this.cadastroPortalForm.disable();
+              setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
+            } else {
+              this.successMessage = (response.payload as string) || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
               this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
               this.cadastroPortalForm.disable();
               setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
             }
-            else {
-              this.successMessage = response.payload as string || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-              this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-              this.cadastroPortalForm.disable();
-              setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
-            }
-          } else {
+            }else {
             this.erro = response.errorDescription || response.responseDescription || 'Resposta inesperada do servidor.';
             this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
           }
         },
-        error: (err: Error) => {
+       error: (err: Error) => {
           this.isLoading = false;
           this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
           this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
         }
       });
   }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
