@@ -95,30 +95,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: BackendPortalResponse) => {
           this.isLoading = false;
-          // --- AJUSTE A LÓGICA DE TRATAMENTO DE RESPOSTA AQUI ---
           if (response) {
-            // A mensagem principal pode vir da 'description' ou diretamente do 'payload' (se for string)
             let messageToDisplay = response.description || 'Login de convidado bem-sucedido!';
 
             if (typeof response.payload === 'string' && response.payload.length > 0) {
-                // Se o payload for uma string e não vazia, use-o como a mensagem principal
                 messageToDisplay = response.payload;
             } else if (response.payload && response.payload.message) {
-                // Fallback: se o payload for um objeto com uma propriedade 'message'
                 messageToDisplay = response.payload.message;
             }
 
-            this.successMessage = messageToDisplay; // Defina a mensagem de sucesso
+            this.successMessage = messageToDisplay;
             console.log('Login de convidado bem-sucedido, UniFi autorizado.', response);
-
-            // Redirecionamento após o sucesso
             if (this.originalUrl) {
               window.location.href = this.originalUrl;
             } else {
-              this.router.navigate(['/success-page']); // Redireciona para uma página de sucesso
+              this.router.navigate(['/success-page']);
             }
           } else {
-            // Caso a resposta seja nula ou não tenha a estrutura esperada
             this.errorMessage = 'Resposta inesperada do servidor após o login de convidado.';
             console.warn('Estrutura da resposta de login de convidado inesperada.', response);
           }
