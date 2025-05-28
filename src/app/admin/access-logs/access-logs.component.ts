@@ -48,14 +48,10 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    // O carregamento inicial é acionado pelo ngAfterViewInit e pelo paginador
   }
 
   ngAfterViewInit(): void {
-    // Se houver ordenação no backend, mesclar com eventos de sort. Por enquanto, ordenação do lado do cliente.
     this.dataSource.sort = this.sort;
-
-    // Se o usuário mudar a ordenação, resetar para a primeira página.
     if (this.sort) {
         this.sort.sortChange.subscribe(() => {
             if (this.paginator) this.paginator.pageIndex = 0;
@@ -130,7 +126,7 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
           next: (success) => {
             if (success) {
               this.snackBar.open('Log deletado com sucesso!', 'OK', { duration: 3000, panelClass: ['success-snackbar'] });
-              this.loadAccessLogs(); // Recarrega a lista
+              this.loadAccessLogs();
             } else {
               this.snackBar.open('Falha ao deletar o log.', 'Erro', { duration: 3000, panelClass: ['error-snackbar']});
             }
@@ -141,7 +137,6 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
   }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

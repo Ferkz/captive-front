@@ -16,7 +16,7 @@ export class JwtInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
     const isAuthenticated = this.authService.isAuthenticated();
-    const isApiUrl = request.url.startsWith('http://localhost:8080/api/admin');
+    const isApiUrl = request.url.startsWith('http://10.0.0.71:8080/api/admin');
 
     if (isAuthenticated && token && isApiUrl) {
       request = request.clone({

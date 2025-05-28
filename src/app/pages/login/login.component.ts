@@ -4,16 +4,15 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-// Importe as interfaces e o serviço
-import { CaptivePortalService, GuestLoginRequest, BackendPortalResponse } from './../../services/captive-portal.service'; // Ajuste o caminho se necessário
+import { CaptivePortalService, GuestLoginRequest, BackendPortalResponse } from './../../services/captive-portal.service';
 
 @Component({
-  selector: 'app-login', // Mantenha o seletor original
-  templateUrl: './login.component.html', // Este template deve conter o formulário de login de convidado
+  selector: 'app-login',
+  templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  guestLoginForm: FormGroup; // Formulário para LOGIN (re-autenticação) de convidados existentes
+  guestLoginForm: FormGroup;
 
   isLoading = false;
   errorMessage: string | null = null;
@@ -33,7 +32,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private captivePortalService: CaptivePortalService
   ) {
-    // Inicialização do Formulário de LOGIN de Convidado (apenas e-mail)
+
     this.guestLoginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -67,7 +66,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   get glf() { return this.guestLoginForm.controls; }
 
   // Método para submeter o formulário de LOGIN de convidado
-  onSubmit(): void { // Renomeado para onSubmit para ser o método padrão do form
+  onSubmit(): void {
     if (this.guestLoginForm.invalid) {
       Object.values(this.guestLoginForm.controls).forEach(control => {
         control.markAsTouched();
@@ -91,7 +90,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       accessPointMac: this.accessPointMac || undefined
     };
 
-    this.captivePortalService.guestLogin(requestData) // Chame o método de login de convidado no serviço
+    this.captivePortalService.guestLogin(requestData)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response: BackendPortalResponse) => {
@@ -99,11 +98,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (response && response.payload && response.payload.message) {
             this.successMessage = response.payload.message || 'Login de convidado bem-sucedido! Acesso à internet reativado.';
             console.log('Guest login successful, UniFi authorized.', response);
-            // Redirecionar para a URL original ou uma página de sucesso
             if (this.originalUrl) {
               window.location.href = this.originalUrl;
             } else {
-              this.router.navigate(['/success-page']); // Exemplo: uma página de sucesso genérica
+              this.router.navigate(['/success-page']);
             }
           } else {
             this.errorMessage = 'Resposta inesperada do servidor após o login de convidado.';
@@ -121,14 +119,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  // Método para navegar de volta para a página inicial (HomeComponent) ou para o cadastro
   goToRegistration(): void {
     if (!this.clientMac) {
       this.errorMessage = 'Não foi possível detectar o MAC do dispositivo para prosseguir com o cadastro.';
       return;
     }
-    // Navega para a rota de cadastro, passando os parâmetros originais
     this.router.navigate(['/cadastro'], { queryParams: this.unifiOriginalParams });
   }
 

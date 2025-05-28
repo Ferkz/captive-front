@@ -30,7 +30,7 @@
         {{ errorMessage }}
       </div>
 
-      <button mat-raised-button color="primary" type="submit" class="w-100 login-button" [disabled]="isLoading || loginForm.invalid">
+      <button mat-raised-button color="accent" type="submit" class="w-100 login-button" [disabled]="isLoading || loginForm.invalid">
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         {{ isLoading ? 'Autenticando...' : 'Entrar' }}
       </button>

@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Adicionar Novo Administrador</h2>
+
+<mat-dialog-content [formGroup]="addAdminForm">
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Nome Completo</mat-label>
+    <input matInput formControlName="fullName" required>
+    <mat-error *ngIf="f['fullName'].hasError('required')">Nome completo é obrigatório.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Email (Usuário)</mat-label>
+    <input matInput formControlName="email" type="email" required>
+    <mat-error *ngIf="f['email'].hasError('required')">Email é obrigatório.</mat-error>
+    <mat-error *ngIf="f['email'].hasError('email')">Formato de email inválido.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Senha</mat-label>
+    <input matInput formControlName="password" type="password" required>
+    <mat-error *ngIf="f['password'].hasError('required')">Senha é obrigatória.</mat-error>
+    <mat-error *ngIf="f['password'].hasError('minlength')">Senha deve ter no mínimo 6 caracteres.</mat-error>
+  </mat-form-field>
+  <mat-checkbox formControlName="enabled" color="primary" class="mt-2">
+    Administrador Ativo
+  </mat-checkbox>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="addAdminForm.invalid || isLoading">
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+    Adicionar
+  </button>
+</mat-dialog-actions>

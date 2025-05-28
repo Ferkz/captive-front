@@ -15,7 +15,7 @@ export class SessoesService {
   getSessions(): Observable<Session[]>{
     return this.http.get<BackendSessionResponse<Session[]>>(SESSION_API_BASE_URL)
     .pipe(
-      map(response => response.payload || []), //extrai o payload e garante array
+      map(response => response.payload || []),
       catchError(this.handleError)
     );
   }

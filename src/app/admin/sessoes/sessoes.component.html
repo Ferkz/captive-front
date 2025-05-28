@@ -1,17 +1,17 @@
 <div class="sessoes-container">
   <div class="page-header">
     <h1>Gerenciamento de Sessões</h1>
-    <mat-form-field appearance="outline" class="filter-field">
+  </div>
+   <mat-form-field appearance="outline" class="filter-field">
       <mat-label>Filtrar sessões</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex: aa:bb:cc...">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-  </div>
 
   <div class="button-row">
-    <button mat-stroked-button color="primary" (click)="loadSessions('all')" class="filter-button">Todas</button>
-    <button mat-stroked-button color="accent" (click)="loadSessions('valid')" class="filter-button">Ativas</button>
-    <button mat-stroked-button color="warn" (click)="loadSessions('expired')" class="filter-button">Expiradas</button>
+    <button mat-raised-button color="primary" (click)="loadSessions('all')" class="filter-button">Todas</button>
+    <button mat-raised-button color="accent" (click)="loadSessions('valid')" class="filter-button">Ativas</button>
+    <button mat-raised-button color="warn" (click)="loadSessions('expired')" class="filter-button">Expiradas</button>
   </div>
 
   <div *ngIf="isLoading" class="loading-indicator">

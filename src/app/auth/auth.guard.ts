@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from './services/auth.service'; // Seu serviço de autenticação
+import { AuthService } from './services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({

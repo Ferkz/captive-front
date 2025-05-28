@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Logs, BackendAccessLogResponse } from '../interfaces/logs';
 
-const ACCESS_LOG_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/accessLogs'; // Endpoint do AccessLogController
+const ACCESS_LOG_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/accessLogs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,6 @@ export class AccessLogService {
 
   constructor(private http: HttpClient) { }
 
-  // O backend atual GET /api/admin/accessLogs retorna todos, mas aceita params de paginação
   getAccessLogs(page: number = 0, size: number = 50, paging: boolean = false): Observable<Logs[]> {
     let params = new HttpParams()
       .set('paging', paging.toString())

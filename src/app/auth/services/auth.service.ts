@@ -32,7 +32,7 @@ export class AuthService {
       tap(response =>{
         if (response && response.token){
           localStorage.setItem(TOKEN_KEY, response.token)
-          this.loggedIn.next(true); //emite que o usuário está logado
+          this.loggedIn.next(true);
           console.log('Admini token stored. Acessando area admin');
           this.router.navigate(['/dashboard'])
         }
@@ -43,13 +43,12 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
     this.loggedIn.next(false);
-    this.router.navigate(['/admin-login']);
+    this.router.navigate(['/auth/admin/login']);
     console.log('Admin logged out');
   }
   getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY)
   }
-  //verifica se o token não espirou
   isAuthenticated(): boolean {
     const token = this.getToken();
     if(!token){

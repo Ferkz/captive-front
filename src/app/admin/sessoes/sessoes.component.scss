@@ -1,6 +1,14 @@
+$primary-color: #00164a;
+$accent-color: #3dc4df;
+$warn-color: #dc3545;
+$text-light: #f8f9fa;
+$text-dark: #343a40;
+$whitecolor:#fff ;
 .sessoes-container {
   padding: 20px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f0f2f5;
+  min-height: calc(100vh - 64px);
 }
 
 .page-header {
@@ -8,18 +16,43 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  padding: 15px 20px;
+  background-color: $whitecolor;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 
   h1 {
     margin: 0;
     font-size: 1.8em;
-    color: #333;
+    color: $primary-color;
   }
 
   .filter-field {
     width: 300px; // Ajuste conforme necessário
   }
-}
+   @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
 
+    h1 {
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+  }
+}
+.filter-field {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  background-color: $whitecolor;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  padding: 5px 15px;
+  @media (max-width:600px) {
+    width: 93%;
+  }
+}
 .button-row {
   margin-bottom: 20px;
   .filter-button {

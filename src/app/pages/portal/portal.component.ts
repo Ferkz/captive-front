@@ -33,8 +33,8 @@ export class PortalComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.cadastroPortalForm = this.fb.group({
-      nome: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      sobrenome: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(/^^(?!([A-Za-zÀ-ÖØ-öø-ÿ\s'-])\1{2,})[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/)]],
+      sobrenome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50),  Validators.pattern(/^^(?!([A-Za-zÀ-ÖØ-öø-ÿ\s'-])\1{2,})[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       telefone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-()]{10,20}$/)]], // Pattern
       acceptTou: [false, Validators.requiredTrue]
@@ -60,13 +60,11 @@ export class PortalComponent implements OnInit {
         logger.info('URL Original:', this.originalRedirectUrl);
       });
   }
-
   get f() { return this.cadastroPortalForm.controls; }
 
   onSubmit(): void {
     this.erro = null;
     this.successMessage = null;
-
     if (this.cadastroPortalForm.invalid) {
       Object.values(this.cadastroPortalForm.controls).forEach(control => {
         control.markAsTouched();
@@ -78,13 +76,11 @@ export class PortalComponent implements OnInit {
       this.snackBar.open(this.erro, 'Fechar', { duration: 4000, panelClass: ['warning-snackbar'] });
       return;
     }
-
     if (!this.clientMacFromUrl) {
         this.erro = 'MAC address do dispositivo não detectado. Recarregue a página ou reconecte-se ao Wi-Fi.';
         this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
         return;
     }
-
     this.isLoading = true;
     const formValue = this.cadastroPortalForm.value;
 
@@ -124,7 +120,6 @@ export class PortalComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 }
-
 const logger = {
   info: console.log,
   warn: console.warn,

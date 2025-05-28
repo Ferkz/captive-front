@@ -1,9 +1,9 @@
 <mat-drawer-container class="drawer-container">
   <mat-drawer #drawer class="drawer" mode="over" [autoFocus]="false">
-  <img src="assets/logo-samar.png" alt="Logo Samar Admin" class="admin-logo">
+  <img class="admin-logo" src="assets/logo-samar.png" alt="Logo Samar Admin" >
     <mat-nav-list class="menu-items">
       <a mat-list-item routerLink="dashboard" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <mat-icon matListItemIcon>analytics</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
       <a mat-list-item routerLink="sessoes" routerLinkActive="active-link">
@@ -18,11 +18,11 @@
         <span matListItemTitle>Logs de Acesso</span>
       </a>
       <a mat-list-item routerLink="tools" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>build</mat-icon>
-        <span matListItemTitle>Ferramentas & Info</span>
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle>Configurações</span>
       </a>
       <mat-divider></mat-divider>
-      <a mat-list-item>
+      <a mat-list-item (click)="logout()">
         <mat-icon matListItemIcon>exit_to_app</mat-icon>
         <span matListItemTitle>Logout</span>
       </a>
@@ -30,7 +30,7 @@
   </mat-drawer>
   <mat-drawer-content>
     <mat-toolbar>
-      <button mat-icon-button class="menu" aria-label="botão menu" (click)="drawer.toggle()">
+      <button mat-icon-button class="menu-icon" aria-label="botão menu" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
       <span>Captive Portal</span>

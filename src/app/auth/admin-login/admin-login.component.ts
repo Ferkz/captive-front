@@ -50,6 +50,7 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
+          this.router.navigate(['/administrator/dashboard']);
           this.snackBar.open('Login realizado com sucesso!', 'OK', { duration: 3000 });
         },
         error: (err: Error) => {

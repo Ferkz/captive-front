@@ -12,3 +12,9 @@ export interface BackendAdminResponse<T> {
   responseDescription?: string;
   payload: T;
 }
+export interface AdministratorAddRequest {
+  fullName: string;
+  email: string;
+  password?: string;
+  enabled?: boolean;
+}

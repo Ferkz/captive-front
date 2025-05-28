@@ -15,13 +15,17 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdministradoresComponent } from './administradores/administradores.component';
 import { ToolsComponent } from './tools/tools.component';
 import { SessoesComponent } from './sessoes/sessoes.component';
 import { AccessLogsComponent } from './access-logs/access-logs.component';
+import { AddAdminDialogComponent } from './administradores/admin/add-admin-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,8 @@ import { AccessLogsComponent } from './access-logs/access-logs.component';
     AdministradoresComponent,
     ToolsComponent,
     SessoesComponent,
-    AccessLogsComponent
+    AccessLogsComponent,
+    AddAdminDialogComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +51,10 @@ import { AccessLogsComponent } from './access-logs/access-logs.component';
     MatPaginatorModule,
     MatFormFieldModule,
     MatTableModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatCheckboxModule
   ]
 })
 export class AdminModule { }

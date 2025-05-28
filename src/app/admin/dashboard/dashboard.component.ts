@@ -68,24 +68,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.dashboardData.validSessionsCount = response.payload;
-          // Chame outros endpoints aqui para popular o resto do dashboardData
-          this.fetchSystemMemory(); // Exemplo de encadeamento ou chamadas separadas
+          this.fetchSystemMemory();
         },
         error: (err) => {
           console.error('Erro ao buscar contagem de sessões válidas:', err);
           this.error = 'Não foi possível carregar a contagem de sessões válidas.';
-          this.isLoading = false; // Parar o loading mesmo em caso de erro parcial
+          this.isLoading = false;
         }
       });
   }
-
   fetchSystemMemory(): void {
     this.http.get<{ payload: SystemMemory }>(`${INFO_API_BASE_URL}/system/memory`)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           this.dashboardData.systemMemory = response.payload;
-          // Chamar próximo dado
           this.fetchSystemInfo();
         },
         error: (err) => this.handleDataFetchError('memória do sistema', err)
@@ -98,7 +95,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.dashboardData.systemInfo = response.payload;
-          // Chamar próximo dado
           this.fetchOsCounts();
         },
         error: (err) => this.handleDataFetchError('informações do sistema', err)
@@ -124,12 +120,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.dashboardData.browserCounts = response.payload;
-          // Última chamada, então paramos o loading
           this.isLoading = false;
         },
         error: (err) => {
             this.handleDataFetchError('contagem de navegadores', err);
-            this.isLoading = false; // Parar loading mesmo em erro
+            this.isLoading = false;
         }
       });
   }

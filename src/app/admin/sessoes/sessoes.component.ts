@@ -19,10 +19,9 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'deviceMac',
-    'fullName', // Adicionado
-    'email',    // Adicionado
+    'fullName',
+    'email',
     'deviceIp',
-    // 'accesspointMac',
     'lastLoginOn',
     'expireLoginOn',
     'valid',

@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Administrator } from './interfaces/administrator';
 import { AdministratorService } from './services/administrator.service';
+import { AddAdminDialogComponent } from './admin/add-admin-dialog.component';
 
 @Component({
   selector: 'app-administradores',
@@ -70,6 +71,17 @@ export class AdministradoresComponent implements OnInit, OnDestroy, AfterViewIni
       });
   }
 
+  openAdminDialog():void {
+    const dialogRef = this.dialog.open(AddAdminDialogComponent,{
+      width:'400px',
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.loadAdministrators();
+      }
+    });
+  }
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -78,20 +90,7 @@ export class AdministradoresComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  openAddAdminDialog(): void {
-    // const dialogRef = this.dialog.open(AdminFormComponent, {
-    //   width: '500px',
-    //   data: { admin: null, isEditMode: false } // Para um novo admin
-    // });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) { // Se o diálogo retornou dados (ou seja, salvou)
-    //     this.loadAdministrators();
-    //     this.snackBar.open('Administrador adicionado com sucesso!', 'OK', { duration: 3000, panelClass: ['success-snackbar']});
-    //   }
-    // });
-    this.snackBar.open('Funcionalidade Adicionar Admin - A implementar diálogo.', 'OK', { duration: 2000 });
-  }
 
   openEditAdminDialog(admin: Administrator): void {
     // const dialogRef = this.dialog.open(AdminFormComponent, {

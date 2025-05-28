@@ -3,15 +3,11 @@ import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-// Defina as URLs base do seu backend. Idealmente, isso viria de um arquivo de ambiente.
+// defini posteriormente as variaveis de ambient
 // Exemplo: import { environment } from '../../environments/environment';
 // const BACKEND_BASE_URL = environment.backendBaseUrl;
-// Por enquanto, vamos definir diretamente:
 const BACKEND_BASE_URL = 'http://10.0.0.71:8080'; // Ajuste se o seu backend estiver em outro lugar
 
-// --- Interfaces para Comunicação com o Backend ---
-
-// Interface para o Login Tradicional do Portal Cativo (username/password)
 export interface CaptiveLoginRequest {
   username?: string;
   password?: string;
@@ -20,43 +16,36 @@ export interface CaptiveLoginRequest {
   ssid?: string;
 }
 
-// Interface para o Registro de Convidado (sem senha)
 export interface GuestRegistrationRequest {
   fullName: string;
   email: string;
   phoneNumber: string;
   deviceMac: string;
-  deviceIp?: string; // Preenchido no backend
+  deviceIp?: string;
   accessPointMac?: string;
-  browser?: string; // Preenchido no backend
-  operatingSystem?: string; // Preenchido no backend
+  browser?: string;
+  operatingSystem?: string;
   acceptTou: boolean;
 }
-
-// Interface para o Login de Convidado (apenas email e mac)
 export interface GuestLoginRequest {
   email: string;
   deviceMac: string;
   accessPointMac?: string;
 }
 
-// Interface para a Resposta Padrão do Backend (SuccessResponseDTO/ErrorResponseDTO)
 export interface BackendPortalResponse {
-  response?: number; // Do GenericResponseDTO (responseId)
-  description?: string; // Do GenericResponseDTO (responseDescription)
-  payload?: any; // Do SuccessResponseDTO (pode conter o objeto com message, mac_address, etc.)
-  errorDescription?: string; // Do ErrorResponseDTO (para erros específicos)
+  response?: number;
+  description?: string;
+  payload?: any;
+  errorDescription?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class CaptivePortalService {
-  // Endpoints para o fluxo de login/logout com username/password
   private captivePortalLoginUrl = `${BACKEND_BASE_URL}/captive/portal/login`;
   private captivePortalLogoutUrl = `${BACKEND_BASE_URL}/captive/portal/logout`;
-
-  // Endpoints para o fluxo de registro e login de convidados (sem password)
   private guestRegisterUrl = `${BACKEND_BASE_URL}/portal/guest/register-and-authorize`;
   private guestLoginUrl = `${BACKEND_BASE_URL}/portal/guest/login`;
 
