@@ -102,33 +102,17 @@ export class PortalComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: GuestRegistrationResponse) => {
           this.isLoading = false;
-          console.log('Resposta completa recebida no PortalComponent (next):', response);
+          console.log('Resposta', response);
 
           if (response.responseId===200) {
-            const descriptionLower = response.responseDescription?.trim().toLowerCase();
-            const payloadString = typeof response.payload === 'string' ? response.payload : '';
-
-            if (descriptionLower === "already active") {
-              this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
-            } else if (descriptionLower === "registration updated") {
-              this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
-            } else if (descriptionLower === "registration successful") {
-              this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-            } else {
-              this.successMessage = `Sucesso: ${response.responseDescription}. ${payloadString}`;
-              if (!this.successMessage.trim()) {
-                this.successMessage = 'Operação realizada com sucesso.';
-              }
-            }
-            this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
+            this.snackBar.open(this.successMessage || 'Sucesso ao realizar cadastro.', 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
             this.cadastroPortalForm.disable();
             setTimeout(() => {
               window.location.href = this.originalRedirectUrl || 'https://www.google.com';
             }, 2500);
-
           } else {
-            this.erro = response.errorDescription || response.responseDescription || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+            this.erro = response.errorDescription || response.responseDescription || 'Erro ao realizar cadastro.';
+            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['success-snackbar'] });
           }
         },
         error: (err: any) => {
