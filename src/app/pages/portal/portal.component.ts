@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-// Ajuste o caminho do seu serviço e interfaces conforme a estrutura do seu projeto
 import { GuestRegistrationService, GuestRegistrationData, GuestRegistrationResponse } from '../../services/guest-registration.service';
 
 @Component({
@@ -108,7 +107,7 @@ export class PortalComponent implements OnInit, OnDestroy {
               this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
               this.cadastroPortalForm.disable();
               setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
-          } else if (descriptionLower === "registration updated") {
+          }else if (descriptionLower === "registration updated") {
               this.successMessage = (response.payload as string) || 'Cadastro atualizado e acesso à internet liberado!';
               this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
               this.cadastroPortalForm.disable();
@@ -122,8 +121,13 @@ export class PortalComponent implements OnInit, OnDestroy {
             }else {
             this.erro = response.errorDescription || response.responseDescription || 'Resposta inesperada do servidor.';
             this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+          }if(response && response.responseId === 409){
+            this.erro = response.errorDescription || response.responseDescription || 'Usuário já cadastrado, redirecionando para página de login.';
+            this.snackBar.open(this.erro, 'Fechar', {duration:5000, panelClass:['Error-snackbar']});
+            this.router.navigate(['/login'])
           }
-        },
+        }
+        ,
        error: (err: Error) => {
           this.isLoading = false;
           this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
@@ -131,7 +135,6 @@ export class PortalComponent implements OnInit, OnDestroy {
         }
       });
   }
-
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
