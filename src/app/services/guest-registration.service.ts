@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-const GUEST_PORTAL_BASE_URL = environment.backendApiUrl;
+const GUEST_PORTAL_BASE_URL = `${environment.backendApiUrl}/portal/guest`;
 
 export interface GuestRegistrationData{
   fullName: string,
