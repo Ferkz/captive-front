@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, finalize } from 'rxjs/operators';
 import { GuestRegistrationService, GuestRegistrationData, GuestRegistrationResponse } from '../../services/guest-registration.service';
 
 @Component({
@@ -55,7 +55,6 @@ export class PortalComponent implements OnInit, OnDestroy {
           this.erro = 'Informações do dispositivo (MAC address) não encontradas na URL. Não é possível prosseguir com o cadastro.';
           this.snackBar.open(this.erro, 'Fechar', { duration: 7000, panelClass: ['error-snackbar'] });
         }
-        // Use console.log ou um logger configurado corretamente, não 'logger.info' diretamente aqui
         console.log('MAC do cliente da URL:', this.clientMacFromUrl);
         console.log('AP MAC da URL:', this.apMacFromUrl);
         console.log('URL Original:', this.originalRedirectUrl);
@@ -95,43 +94,61 @@ export class PortalComponent implements OnInit, OnDestroy {
       accessPointMac: this.apMacFromUrl || undefined,
     };
 
-    this.guestRegistrationService.registerAndAuthorize(registrationData)
-      .pipe(takeUntil(this.unsubscribe$))
+     this.guestRegistrationService.registerAndAuthorize(registrationData)
+      .pipe(
+        finalize(() => this.isLoading = false),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe({
         next: (response: GuestRegistrationResponse) => {
           this.isLoading = false;
-        if(response && response.responseId ===200){
-          const descriptionLower = response.responseDescription?.trim().toLowerCase();
-          if(descriptionLower ==="already active"){
-              this.successMessage = (response.payload as string) || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
-              this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-              this.cadastroPortalForm.disable();
-              setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
-          }else if (descriptionLower === "registration updated") {
-              this.successMessage = (response.payload as string) || 'Cadastro atualizado e acesso à internet liberado!';
-              this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-              this.cadastroPortalForm.disable();
-              setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
+          console.log('Resposta completa recebida no PortalComponent (next):', response);
+
+          if (response && response.responseId === 200) {
+            const descriptionLower = response.responseDescription?.trim().toLowerCase();
+            const payloadString = typeof response.payload === 'string' ? response.payload : '';
+
+            if (descriptionLower === "already active") {
+              this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
+            } else if (descriptionLower === "registration updated") {
+              this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
+            } else if (descriptionLower === "registration successful") {
+              this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
             } else {
-              this.successMessage = (response.payload as string) || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-              this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-              this.cadastroPortalForm.disable();
-              setTimeout(() => { window.location.href = this.originalRedirectUrl || 'https://www.google.com'; }, 2500);
+              this.successMessage = `Sucesso: ${response.responseDescription}. ${payloadString}`;
+              if (!this.successMessage.trim()) {
+                this.successMessage = 'Operação realizada com sucesso.';
+              }
             }
-            }else {
+
+            this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
+            this.cadastroPortalForm.disable();
+
+            setTimeout(() => {
+              window.location.href = this.originalRedirectUrl || 'https://www.google.com';
+            }, 2500);
+
+          } else {
             this.erro = response.errorDescription || response.responseDescription || 'Resposta inesperada do servidor.';
-            this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
-          }if(response && response.responseId === 409){
-            this.erro = response.errorDescription || response.responseDescription || 'Usuário já cadastrado, redirecionando para página de login.';
-            this.snackBar.open(this.erro, 'Fechar', {duration:5000, panelClass:['Error-snackbar']});
-            this.router.navigate(['/login'])
+            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
           }
-        }
-        ,
-       error: (err: Error) => {
+        },
+        error: (err: any) => {
           this.isLoading = false;
-          this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
-          this.snackBar.open(this.erro, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+          console.error('Falha na requisição (error handler):', err);
+
+          if (err.status === 409) {
+            this.erro = err.message || 'Este e-mail já possui um cadastro. Por favor, use a opção "Login".';
+            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 7000, panelClass: ['warning-snackbar'] });
+
+            setTimeout(() => {
+              this.router.navigate(['/login-convidado'], { queryParams: this.unifiOriginalParams });
+            }, 3000);
+
+          } else {
+            this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
+            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+          }
         }
       });
   }

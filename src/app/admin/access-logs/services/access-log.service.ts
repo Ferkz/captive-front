@@ -3,8 +3,8 @@ import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Logs, BackendAccessLogResponse } from '../interfaces/logs';
-
-const ACCESS_LOG_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/accessLogs';
+import { environment } from 'src/environments/environment';
+const ACCESS_LOG_API_BASE_URL = `${environment.backendApiUrl}/api/admin/accessLogs`;
 
 @Injectable({
   providedIn: 'root'

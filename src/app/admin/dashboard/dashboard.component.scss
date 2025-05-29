@@ -1,3 +1,8 @@
+$primary-color: #00164a;
+$accent-color: #3dc4df;
+$text-light: #f8f9fa;
+$text-dark: #343a40;
+$error-color: #dc3545;
 .dashboard-container {
   padding: 15px;
 }
@@ -22,6 +27,8 @@
 }
 
 .dashboard-card {
+  color: $primary-color;
+  font-size: 15px;
   mat-card-header {
     padding-bottom: 8px; // Espaço abaixo do título
   }
@@ -32,7 +39,7 @@
   .metric {
     font-size: 2.5em;
     font-weight: bold;
-    color: #007bff; // Exemplo de cor para métricas
+    color: $text-dark; // Exemplo de cor para métricas
     text-align: center;
     margin: 10px 0;
   }

@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
-// defini posteriormente as variaveis de ambient
-// Exemplo: import { environment } from '../../environments/environment';
-// const BACKEND_BASE_URL = environment.backendBaseUrl;
-const BACKEND_BASE_URL = 'http://10.0.0.71:8080'; // Ajuste se o seu backend estiver em outro lugar
+const BACKEND_BASE_URL = environment.backendApiUrl;
+
 
 export interface CaptiveLoginRequest {
   username?: string;

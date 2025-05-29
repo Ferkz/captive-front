@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; // Para chamadas diretas ou use um InfoService
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import { environment } from 'src/environments/environment';
 export interface SystemMemory {
   total?: number;
   free?: number;
@@ -25,7 +25,7 @@ export interface SystemInfo {
 export interface CountData {
   name?: string;
   os?: string;
-  browser?: string;
+  browserName?: string;
   quantity?: number;
 }
 
@@ -39,7 +39,7 @@ export interface AdminDashboardData {
   totalSessionsCount?: number;
 }
 
-const INFO_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/info';
+const INFO_API_BASE_URL = `${environment.backendApiUrl}/api/admin/info`;
 
 @Component({
   selector: 'app-dashboard',
@@ -107,7 +107,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.dashboardData.osCounts = response.payload;
-          // Chamar próximo dado
           this.fetchBrowserCounts();
         },
         error: (err) => this.handleDataFetchError('contagem de OS', err)
@@ -128,8 +127,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-
   private handleDataFetchError(dataType: string, error: any): void {
     console.error(`Erro ao buscar ${dataType}:`, error);
     this.error = `Não foi possível carregar dados de ${dataType}.`;

@@ -3,8 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
-const AUTH_API_URL = 'http://10.0.0.71:8080/api/authenticate';
+const AUTH_API_URL = `${environment.backendApiUrl}/api/authenticate`;
 const TOKEN_KEY = 'adminAuthToken';
 
 export interface AuthRequest {

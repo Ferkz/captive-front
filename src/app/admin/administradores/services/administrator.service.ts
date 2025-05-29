@@ -3,8 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Administrator, AdministratorAddRequest, BackendAdminResponse } from '../interfaces/administrator';
+import { environment } from 'src/environments/environment';
 
-const ADMIN_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/administrators';
+const ADMIN_API_BASE_URL = `${environment.backendApiUrl}/api/admin/administrators`;
 
 @Injectable({
   providedIn: 'root'

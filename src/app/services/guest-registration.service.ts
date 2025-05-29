@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
-const GUEST_PORTAL_BASE_URL = 'http://10.0.0.71:8080/portal/guest';
+const GUEST_PORTAL_BASE_URL = environment.backendApiUrl;
 
 export interface GuestRegistrationData{
   fullName: string,
@@ -42,7 +43,7 @@ export class GuestRegistrationService {
     let errorMessage = 'Ocorreu um erro desconhecido durante o cadastro!';
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erro do cliente: ${error.error.message}`;
-    } else {
+    }else{
       console.error(
         `Erro do backend ${error.status}, ` +
         `Corpo do erro: ${JSON.stringify(error.error)}`);

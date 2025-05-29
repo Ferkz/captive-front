@@ -50,7 +50,7 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     if (this.dataSource.paginator) {
-      this.dataSource.paginator._intl.itemsPerPageLabel = 'Itens por página'; // Tradução
+      this.dataSource.paginator._intl.itemsPerPageLabel = 'Itens por página';
     }
   }
 
@@ -101,7 +101,6 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   deleteSession(session: Session): void {
     if (!session.id) return;
-    // Adicionar um diálogo de confirmação aqui
     const confirmDelete = confirm(`Tem certeza que deseja deletar a sessão do dispositivo MAC: ${session.deviceMac}? Esta ação pode desconectar o usuário.`);
     if (confirmDelete) {
       this.isLoading = true;

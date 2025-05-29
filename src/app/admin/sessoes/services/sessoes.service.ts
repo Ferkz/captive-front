@@ -3,8 +3,8 @@ import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Session, SessionPatchData, BackendSessionResponse } from '../interfaces/session';
-
-const SESSION_API_BASE_URL = 'http://10.0.0.71:8080/api/admin/sessions';
+import { environment } from 'src/environments/environment';
+const SESSION_API_BASE_URL = `${environment.backendApiUrl}/api/admin/sessions`;
 
 @Injectable({
   providedIn: 'root'
