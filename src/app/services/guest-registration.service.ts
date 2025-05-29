@@ -54,6 +54,8 @@ export class GuestRegistrationService {
       }
       else if (error.error && typeof error.error === 'string') {
         errorMessage = error.error;
+      }if(error.status === 409){
+        errorMessage = `Usuário já tem cadastro ativo, diriga-se para a login.`
       }
        else {
           errorMessage = `Erro ${error.status}: Falha ao conectar com o servidor.`;

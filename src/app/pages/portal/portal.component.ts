@@ -104,7 +104,7 @@ export class PortalComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           console.log('Resposta completa recebida no PortalComponent (next):', response);
 
-          if (response && response.responseId === 200) {
+          if (response.responseId===200) {
             const descriptionLower = response.responseDescription?.trim().toLowerCase();
             const payloadString = typeof response.payload === 'string' ? response.payload : '';
 
@@ -120,16 +120,14 @@ export class PortalComponent implements OnInit, OnDestroy {
                 this.successMessage = 'Operação realizada com sucesso.';
               }
             }
-
             this.snackBar.open(this.successMessage, 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
             this.cadastroPortalForm.disable();
-
             setTimeout(() => {
               window.location.href = this.originalRedirectUrl || 'https://www.google.com';
             }, 2500);
 
           } else {
-            this.erro = response.errorDescription || response.responseDescription || 'Resposta inesperada do servidor.';
+            this.erro = response.errorDescription || response.responseDescription || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
             this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
           }
         },
@@ -140,10 +138,9 @@ export class PortalComponent implements OnInit, OnDestroy {
           if (err.status === 409) {
             this.erro = err.message || 'Este e-mail já possui um cadastro. Por favor, use a opção "Login".';
             this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 7000, panelClass: ['warning-snackbar'] });
-
             setTimeout(() => {
-              this.router.navigate(['/login-convidado'], { queryParams: this.unifiOriginalParams });
-            }, 3000);
+              this.router.navigate(['/login'], { queryParams: this.unifiOriginalParams });
+            }, 2000);
 
           } else {
             this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';

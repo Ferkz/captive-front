@@ -48,10 +48,6 @@
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         {{ isLoading ? 'Enviando...' : 'Conectar à Rede Wi-Fi' }}
       </button>
-
-      <div *ngIf="erro && !isLoading" class="error-message-box alert alert-danger mt-3">
-        {{erro}}
-      </div>
     </form>
 
     <div *ngIf="successMessage" class="success-message-box alert alert-success mt-3">
