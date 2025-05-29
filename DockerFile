@@ -1,4 +1,6 @@
 # Etapa de build
+# Feito por Luis Fernando
+# 29-05-2025
 FROM node:20.11.0 as build
 
 WORKDIR /app
@@ -12,7 +14,7 @@ COPY . .
 
 RUN ng build --configuration=production
 
-# Etapa de produção
+
 FROM nginx:stable-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
