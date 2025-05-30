@@ -100,38 +100,48 @@ export class PortalComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$)
       )
       .subscribe({
-        next: (response: GuestRegistrationResponse) => {
-          this.isLoading = false;
-          console.log('Resposta', response);
+  next: (response: GuestRegistrationResponse) => {
+    this.isLoading = false;
+    console.log('Resposta do serviço:', response);
+    const descriptionLower = response.responseDescription?.trim().toLowerCase();
+    const payloadString = response.payload || '';
 
-          if (response.responseId===200) {
-            this.snackBar.open(this.successMessage || 'Sucesso ao realizar cadastro.', 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-            this.cadastroPortalForm.disable();
-            setTimeout(() => {
-              window.location.href = this.originalRedirectUrl || 'https://www.google.com';
-            }, 2500);
-          } else {
-            this.erro = response.errorDescription || response.responseDescription || 'Erro ao realizar cadastro.';
-            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['success-snackbar'] });
-          }
-        },
-        error: (err: any) => {
-          this.isLoading = false;
-          console.error('Falha na requisição (error handler):', err);
+    if (response.responseDescription) {
+        if (descriptionLower === "already active"){
+            this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
+        } else if (descriptionLower === "registration updated") {
+            this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
 
-          if (err.status === 409) {
-            this.erro = err.message || 'Este e-mail já possui um cadastro. Por favor, use a opção "Login".';
-            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 7000, panelClass: ['warning-snackbar'] });
-            setTimeout(() => {
-              this.router.navigate(['/login'], { queryParams: this.unifiOriginalParams });
-            }, 2000);
-
-          } else {
-            this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
-            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
-          }
+        } else if (descriptionLower === "registration successful") {
+            this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
+        } else {
+            this.successMessage = payloadString || descriptionLower || 'Operação realizada com sucesso.';
         }
-      });
+        this.snackBar.open(this.successMessage || 'Acesso liberado.', 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
+        this.cadastroPortalForm.disable();
+        setTimeout(() => {
+            window.location.href = this.originalRedirectUrl || 'https://www.google.com';
+        }, 2500);
+    } else {
+        this.erro = payloadString || descriptionLower || 'Falha na operação de cadastro.';
+        this.snackBar.open(this.erro|| 'Error desconhecido' , 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    }
+  },
+  error: (err: any) => {
+    this.isLoading = false;
+    console.error('Falha na requisição (error handler):', err);
+    if (err.message.includes('Este e-mail já possui um cadastro')) {
+        this.erro = err.message;
+        this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', { duration: 7000, panelClass: ['warning-snackbar'] });
+        setTimeout(() => {
+            this.router.navigate(['/login'], { queryParams: this.unifiOriginalParams });
+        }, 2000);
+    } else {
+        this.erro = err.message || 'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
+        this.snackBar.open(this.erro || 'Error desconhecido', 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+    }
+  }
+});
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
