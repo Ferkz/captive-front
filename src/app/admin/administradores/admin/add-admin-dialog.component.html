@@ -31,6 +31,6 @@
   <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
   <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="addAdminForm.invalid || isLoading">
     <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
-    Adicionar
+    Salvar
   </button>
 </mat-dialog-actions>

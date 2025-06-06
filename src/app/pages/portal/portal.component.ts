@@ -111,10 +111,12 @@ export class PortalComponent implements OnInit, OnDestroy {
             this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
         } else if (descriptionLower === "registration updated") {
             this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
-
         } else if (descriptionLower === "registration successful") {
             this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-        } else {
+        } else if(descriptionLower ==='Email Already Registered'){
+          this.successMessage = payloadString || 'Este email já possui um cadastro. Por favor, use a opção Login.'
+        }
+        else {
             this.successMessage = payloadString || descriptionLower || 'Operação realizada com sucesso.';
         }
         this.snackBar.open(this.successMessage || 'Acesso liberado.', 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
@@ -142,10 +144,15 @@ export class PortalComponent implements OnInit, OnDestroy {
     }
   }
 });
+
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+  redirectUserLogin(): void{
+    this.router.navigate(['/login'],{queryParams:this.unifiOriginalParams})
+
   }
 }
 

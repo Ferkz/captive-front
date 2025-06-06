@@ -13,6 +13,7 @@ export interface BackendAdminResponse<T> {
   payload: T;
 }
 export interface AdministratorAddRequest {
+  id: number,
   fullName: string;
   email: string;
   password?: string;

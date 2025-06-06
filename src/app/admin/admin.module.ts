@@ -17,6 +17,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -26,6 +27,8 @@ import { ToolsComponent } from './tools/tools.component';
 import { SessoesComponent } from './sessoes/sessoes.component';
 import { AccessLogsComponent } from './access-logs/access-logs.component';
 import { AddAdminDialogComponent } from './administradores/admin/add-admin-dialog.component';
+import { ChangePasswordDialogComponent } from './administradores/change-password-dialog/change-password-dialog.component';
+import { ConfirmDialogComponent } from './confirm/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,9 +37,10 @@ import { AddAdminDialogComponent } from './administradores/admin/add-admin-dialo
     SessoesComponent,
     AdministradoresComponent,
     ToolsComponent,
-    SessoesComponent,
     AccessLogsComponent,
-    AddAdminDialogComponent
+    AddAdminDialogComponent,
+    ChangePasswordDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +58,8 @@ import { AddAdminDialogComponent } from './administradores/admin/add-admin-dialo
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSortModule
   ]
 })
 export class AdminModule { }

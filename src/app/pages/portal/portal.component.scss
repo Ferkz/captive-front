@@ -120,6 +120,7 @@ $successcolor: #4caf50;
     padding: 12px 0;
     font-size: 1.1em;
   }
+
   .error-message-box, .success-message-box {
     margin-top: 15px;
     padding: 10px;
@@ -182,5 +183,17 @@ $successcolor: #4caf50;
     border: 1px solid #b8daff;
   }
 }
+  .login{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: $whitecolor;
+    margin-top: 5px;
+    .btn-login{
+      width: 100%;
+      margin-top: 9px;
+
+    }
+  }
 .mt-3 { margin-top: 1rem !important; }
 .mt-2 { margin-top: 0.5rem !important; }

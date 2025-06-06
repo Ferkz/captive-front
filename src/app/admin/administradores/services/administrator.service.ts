@@ -40,16 +40,16 @@ export class AdministratorService {
         catchError(this.handleError)
       );
   }
-  updateAdministrator(adminData: Administrator): Observable<Administrator> {
+  updateAdministrator(id: number, adminData: Administrator): Observable<Administrator> {
 
-    return this.http.put<BackendAdminResponse<Administrator>>(ADMIN_API_BASE_URL, adminData)
+    return this.http.put<BackendAdminResponse<Administrator>>(`${ADMIN_API_BASE_URL}`, adminData)
       .pipe(
         map(response => response.payload),
         catchError(this.handleError)
       );
   }
 
-  changePassword(id: number, password: string): Observable<boolean> {
+  changePassword(id: number, password: string,): Observable<boolean> {
     return this.http.patch<BackendAdminResponse<boolean>>(`${ADMIN_API_BASE_URL}/${id}/password`, password, {
       headers: { 'Content-Type': 'application/json' }
     })
