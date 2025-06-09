@@ -9,12 +9,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog'; // Para diálogos de confirmação/edição
-import { Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Session } from './interfaces/session';
 import { SessoesService } from './services/sessoes.service';
-import { Observable } from 'rxjs';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
@@ -43,32 +42,64 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
   error: string | null = null;
   resultsLength = 0;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  _paginator!: MatPaginator;
+  _sort!: MatSort;
+  @ViewChild(MatPaginator, { static:false})
+  set paginator(value: MatPaginator){
+    if(value){
+      this._paginator = value;
+      this.dataSource.paginator = this._paginator
+      this._paginator._intl.itemsPerPageLabel = 'itens por página'
+      this._paginator.length = this.resultsLength
+      console.log('Sessoescomponet: paginator atribuido ao datasource via setter');
+    }
+    else{
+      console.warn('sessoescomponent: setter matpaginator null');
+    }
+  }
+
+  @ViewChild(MatSort, {static:false})
+  set sort(value: MatSort){
+     console.log('SessoesComponent: Setter MatSort - Valor recebido:', value);
+    if (value) {
+      this._sort = value; // Atribui à variável interna
+      this.dataSource.sort = this._sort; // Atribui ao dataSource
+      // Assinar o sortChange aqui, garantindo que ele só ocorra uma vez por instância de sort
+      this._sort.sortChange.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        console.log('SessoesComponent: Sort changed - Resetting paginator to first page.');
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      });
+      console.log('SessoesComponent: Sort atribuído ao dataSource via setter.');
+    } else {
+      console.warn('SessoesComponent: Setter MatSort - Valor nulo.');
+    }
+
+  }
 
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private sessoesService: SessoesService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog // Para diálogos
-  ) {}
+    public dialog: MatDialog
+  ) {
+    console.log('SessoesComponent: Constructor - dataSource inicializado.');
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('SessoesComponent: ngOnInit - nenhum carregamento inicial aqui, será feito em ngAfterViewInit.');
+  }
 
   ngAfterViewInit(): void {
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-    } else {
-      console.warn('Mat sort não encontrado.');
-    }
-    this.loadSessions();
+  this.loadSessions();
+
+
   }
 
   loadSessions(filter: 'all' | 'valid' | 'expired' = 'all'): void {
+    console.log('SessoesComponent: loadSessions - Iniciando carregamento com filtro:', filter);
     this.isLoading = true;
     this.error = null;
     let requestObservable: Observable<Session[]>;
@@ -87,40 +118,30 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
     requestObservable
       .pipe(
         takeUntil(this.unsubscribe$),
-        finalize(() => (this.isLoading = false))
+        finalize(() => {
+          this.isLoading = false;
+          console.log('SessoesComponent: loadSessions - Carregamento finalizado. isLoading:', this.isLoading);
+        })
       )
       .subscribe({
         next: (data) => {
+          console.log('SessoesComponent: loadSessions - Dados recebidos:', data);
           this.dataSource.data = data;
+          console.log('SessoesComponent: loadSessions - dataSource.data.length após atribuição:', this.dataSource.data.length);
           this.resultsLength = data.length;
-          if (this.paginator) {
-            this.dataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Itens por página';
-            console.log(
-              'AccessLogsComponent: loadAccessLogs - dataSource.paginator atribuído no next().'
-            );
-          } else {
-            console.warn(
-              'AccessLogsComponent: loadAccessLogs - MatPaginator ainda não encontrado no next().'
-            );
+          if (this._paginator) {
+            this._paginator._intl.itemsPerPageLabel = 'Itens por página';
+            this._paginator.firstPage();
           }
-          if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-            this.dataSource.paginator.length = this.resultsLength;
-            console.log(
-              'AccessLogsComponent: loadAccessLogs - Paginator firstPage() e length atualizado para:',
-              this.dataSource.paginator.length
-            );
-          }
-
           if (this.dataSource.filter) {
             this.dataSource.filter = this.dataSource.filter;
             if (this.dataSource.paginator) {
-              this.dataSource.paginator.firstPage();
+                this.dataSource.paginator.firstPage();
             }
           }
         },
         error: (err: Error) => {
+          console.error('SessoesComponent: loadSessions - Erro ao carregar sessões:', err);
           this.error = err.message || 'Não foi possível carregar as sessões.';
           this.snackBar.open(this.error, 'Fechar', { duration: 5000 });
         },
@@ -136,16 +157,20 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   viewSessionDetails(session: Session): void {
-    console.log('Ver detalhes da sessão:', session);
+    console.log('SessoesComponent: Ver detalhes da sessão:', session);
     this.snackBar.open(
       `Detalhes da sessão ID ${session.id} (MAC: ${session.deviceMac})`,
       'OK',
       { duration: 3000 }
     );
   }
+
   deleteSession(session: Session): void {
     const sessionId: number = session.id as number;
-    if (sessionId === null || sessionId === undefined) return;
+    if (sessionId === null || sessionId === undefined) {
+        console.error('SessoesComponent: ID da sessão é inválido ou nulo. Não é possível excluir.');
+        return;
+    }
     const dialogData: ConfirmDialogData = {
       title: 'Confirmar Exclusão',
       message: `Tem certeza que deseja deletar a sessão do dispositivo MAC: ${session.deviceMac})? Esta ação pode desconectar o usuário.`,
@@ -174,7 +199,7 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.snackBar.open('Sessão deletada com sucesso!', 'OK', {
                   duration: 3000,
                 });
-                this.loadSessions();
+                this.loadSessions(); // Recarrega a lista
               } else {
                 this.snackBar.open('Falha ao deletar a sessão.', 'Erro', {
                   duration: 3000,
@@ -194,6 +219,7 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
+    console.log('SessoesComponent: ngOnDestroy - Componente sendo destruído.');
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

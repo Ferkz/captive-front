@@ -49,9 +49,38 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
   resultsLength = 0;
   pageSize = 10;
   currentPage = 0;
+  _paginator!: MatPaginator;
+  _sort!: MatSort;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator, {static:false})
+  set paginator(value:MatPaginator){
+    if(value){
+      this._paginator = value;
+      this.dataSource.paginator = this._paginator
+      this._paginator._intl.itemsPerPageLabel = 'Itens por página'
+      this._paginator.length=this.resultsLength
+    }
+    else{
+      console.warn('Setter matpaginator null');
+    }
+  }
+  @ViewChild(MatSort, {static:false})
+  set sort(value: MatSort) {
+    console.log('AccessLogsComponent: Setter MatSort - Valor recebido:', value);
+    if (value) {
+      this._sort = value;
+      this.dataSource.sort = this._sort;
+      this._sort.sortChange.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        console.log('AccessLogsComponent: Sort changed - Resetting paginator to first page.');
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      });
+      console.log('Sort atribuído ao dataSource via setter.');
+    } else {
+      console.warn('Setter MatSort null.');
+    }
+  }
 
   private unsubscribe$ = new Subject<void>();
 
@@ -64,31 +93,15 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    console.log('AccesslogComponent: ngAfterViewInit = executado');
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-      console.log('AccessLogComponent ');
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-    } else {
-      console.warn(
-        'AccessLogsComponent: ngAfterViewInit - setTimeout - MatSort não encontrado.'
-      );
-    }
     this.loadAccessLogs();
   }
 
   loadAccessLogs(): void {
     this.isLoading = true;
     this.error = null;
-    // O endpoint do backend `/api/admin/accessLogs` não parece ter paginação robusta
-    // na sua definição atual. Ele aceita 'paging', 'page', 'size' mas retorna List<AccessLogDTO>.
-    // Para MatPaginator funcionar bem com dados do servidor, precisaríamos que o backend
-    // retornasse o total de itens também.
-    // Por enquanto, vamos buscar todos e paginar no frontend.
+
     this.accessLogService
-      .getAccessLogs(0, 1000, false) // Buscar um número grande, sem paginação no backend
+      .getAccessLogs(0, 1000, false)
       .pipe(
         takeUntil(this.unsubscribe$),
         finalize(() => (this.isLoading = false))
@@ -96,9 +109,10 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe({
         next: (data) => {
           this.dataSource.data = data;
-          this.resultsLength = data.length; // Atualiza o total para o paginador
-          if (this.paginator) {
-            this.dataSource.paginator = this.paginator;
+          this.resultsLength = data.length;
+          if (this._paginator) {
+          this._paginator.length = this.resultsLength
+          this._paginator.firstPage();
             this.paginator._intl.itemsPerPageLabel = 'Itens por página';
             console.log(
               'AccessLogsComponent: loadAccessLogs - dataSource.paginator atribuído no next().'
@@ -108,16 +122,7 @@ export class AccessLogsComponent implements OnInit, OnDestroy, AfterViewInit {
               'AccessLogsComponent: loadAccessLogs - MatPaginator ainda não encontrado no next().'
             );
           }
-          if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-            this.dataSource.paginator.length = this.resultsLength;
-            console.log(
-              'AccessLogsComponent: loadAccessLogs - Paginator firstPage() e length atualizado para:',
-              this.dataSource.paginator.length
-            );
-          }
-
-          if (this.dataSource.filter) {
+            if (this.dataSource.filter) {
             this.dataSource.filter = this.dataSource.filter;
             if (this.dataSource.paginator) {
               this.dataSource.paginator.firstPage();
