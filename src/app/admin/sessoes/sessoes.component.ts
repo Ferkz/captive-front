@@ -29,6 +29,7 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
     'id',
     'deviceMac',
     'fullName',
+    'cpf',
     'hostname',
     'email',
     'deviceIp',
@@ -94,8 +95,6 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
   this.loadSessions();
-
-
   }
 
   loadSessions(filter: 'all' | 'valid' | 'expired' = 'all'): void {
@@ -128,6 +127,8 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('SessoesComponent: loadSessions - Dados recebidos:', data);
           this.dataSource.data = data;
           console.log('SessoesComponent: loadSessions - dataSource.data.length após atribuição:', this.dataSource.data.length);
+         console.log('cpf', data[0]?.cpf);
+
           this.resultsLength = data.length;
           if (this._paginator) {
             this._paginator._intl.itemsPerPageLabel = 'Itens por página';

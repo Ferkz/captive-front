@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
 
     this.guestLoginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      cpf: ['', [Validators.required,]]
     });
   }
 
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       Object.values(this.guestLoginForm.controls).forEach(control => {
         control.markAsTouched();
       });
-      this.errorMessage = 'Por favor, insira um e-mail válido para fazer login.';
+      this.errorMessage = 'Por favor, insira um CPF válido para fazer login.';
       return;
     }
 
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.successMessage = null;
 
     const requestData: GuestLoginRequest = {
-      email: this.glf['email'].value,
+      cpf: this.glf['cpf'].value,
       deviceMac: this.clientMac,
       accessPointMac: this.accessPointMac || undefined
     };
@@ -121,7 +121,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (err.error && err.error.description) {
             this.errorMessage = err.error.description + ': ' + (err.error.payload || '');
           } else {
-            this.errorMessage = 'Falha no login de convidado. Verifique seu e-mail ou tente novamente mais tarde.';
+            this.errorMessage = 'Falha no login de convidado. Verifique seu CPF ou tente novamente mais tarde.';
           }
           console.error('Falha no login de convidado:', err);
         }

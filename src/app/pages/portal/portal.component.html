@@ -6,19 +6,19 @@
 
     <form [formGroup]="cadastroPortalForm" (ngSubmit)="onSubmit()" class="formulario" *ngIf="!successMessage">
       <mat-form-field class="form-field nome" appearance="outline">
-        <mat-label class="nome-label">Nome</mat-label>
-        <input matInput formControlName="nome" placeholder="Seu primeiro nome">
+        <mat-label class="nome-label">Nome Completo</mat-label>
+        <input matInput formControlName="nome" placeholder="Nome Completo">
         <mat-error *ngIf="f['nome'].hasError('required')">Nome é obrigatório.</mat-error>
-        <mat-error *ngIf="f['nome'].hasError('minlength') || f['nome'].hasError('maxlength')">Nome deve ter entre 3 e 50 caracteres.</mat-error>
+        <mat-error *ngIf="f['nome'].hasError('minlength') || f['nome'].hasError('maxlength')">Nome deve ter entre 3 e 66 caracteres.</mat-error>
         <mat-error *ngIf="f['nome'].hasError('pattern')">Insira um nome válido</mat-error>
       </mat-form-field>
 
-      <mat-form-field class="form-field sobrenome" appearance="outline">
-        <mat-label class="sobrenome-label">Sobrenome</mat-label>
-        <input matInput formControlName="sobrenome" placeholder="Seu sobrenome completo">
-        <mat-error *ngIf="f['sobrenome'].hasError('required')">Sobrenome é obrigatório.</mat-error>
-        <mat-error *ngIf="f['sobrenome'].hasError('minlength') || f['sobrenome'].hasError('maxlength')">Sobrenome deve ter entre 3 e 50 caracteres.</mat-error>
-        <mat-error *ngIf="f['sobrenome'].hasError('pattern')">Insira um nome válido</mat-error>
+      <mat-form-field class="form-field cpf" appearance="outline">
+        <mat-label class="sobrenome-label">CPF</mat-label>
+        <input matInput formControlName="cpf" placeholder="Insira seu CPF">
+        <mat-error *ngIf="f['cpf'].hasError('required')">CPF é obrigatório.</mat-error>
+        <mat-error *ngIf="f['cpf'].hasError('minlength') || f['cpf'].hasError('maxlength')">CPF precisa conter 11 caracteres.</mat-error>
+        <mat-error *ngIf="f['cpf'].hasError('pattern')">Insira um nome CPF válido.</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field email" appearance="outline">

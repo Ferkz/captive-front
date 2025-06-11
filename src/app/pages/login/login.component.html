@@ -4,7 +4,7 @@
   </div>
 
   <h2>Login de Convidado</h2>
-  <p>Insira seu e-mail para verificar seu cadastro e reativar seu acesso à rede Wi-Fi.</p>
+  <p>Insira seu CPF para verificar seu cadastro e reativar seu acesso à rede Wi-Fi.</p>
 
   <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
   <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
@@ -12,12 +12,12 @@
 
   <form [formGroup]="guestLoginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" formControlName="email" class="form-control"
-             [ngClass]="{ 'is-invalid': glf['email'].touched && glf['email'].errors }">
-      <div *ngIf="glf['email'].touched && glf['email'].errors" class="invalid-feedback">
-        <div *ngIf="glf['email'].errors['required']">Email é obrigatório.</div>
-        <div *ngIf="glf['email'].errors['email']">Email inválido.</div>
+      <label for="loginEmail">Insira seu CPF</label>
+      <input id="loginEmail" type="cpf" formControlName="cpf" class="form-control"
+             [ngClass]="{ 'is-invalid': glf['cpf'].touched && glf['cpf'].errors }">
+      <div *ngIf="glf['cpf'].touched && glf['cpf'].errors" class="invalid-feedback">
+        <div *ngIf="glf['cpf'].errors['required']">CPF é obrigatório.</div>
+        <div *ngIf="glf['cpf'].errors['cpf']">CPF inválido.</div>
       </div>
     </div>
 

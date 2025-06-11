@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
 const GUEST_PORTAL_BASE_URL = `${environment.backendApiUrl}/portal/guest`;
 
 export interface GuestRegistrationData{
-  fullName: string,
+  fullName: string;
+  cpf: string;
   email: string;
   phoneNumber: string;
   acceptTou: boolean;
@@ -23,6 +24,7 @@ export interface GuestRegistrationResponse {
   responseDescription?: string;
   payload?: any;
   errorDescription?: string;
+  redirectUrl?: string;
 }
 @Injectable({
   providedIn: 'root'

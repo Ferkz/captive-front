@@ -9,6 +9,7 @@ export interface Session {
   browser?: string;
   operatingSystem?: string;
   fullName?: string;
+  cpf?:string
   hostname?: string,
   email?: string;
   phoneNumber?: string;

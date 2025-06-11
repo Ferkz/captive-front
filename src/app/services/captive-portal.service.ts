@@ -18,6 +18,7 @@ export interface CaptiveLoginRequest {
 export interface GuestRegistrationRequest {
   fullName: string;
   email: string;
+  cpf:string
   phoneNumber: string;
   deviceMac: string;
   deviceIp?: string;
@@ -27,7 +28,7 @@ export interface GuestRegistrationRequest {
   acceptTou: boolean;
 }
 export interface GuestLoginRequest {
-  email: string;
+  cpf: string;
   deviceMac: string;
   accessPointMac?: string;
 }
@@ -101,7 +102,6 @@ export class CaptivePortalService {
    * @returns Observable da resposta do backend.
    */
   guestLogin(loginData: GuestLoginRequest): Observable<BackendPortalResponse> {
-    // O backend espera um @RequestBody, então enviamos o objeto JSON diretamente.
     return this.http.post<BackendPortalResponse>(this.guestLoginUrl, loginData)
       .pipe(
         tap(response => console.log('Resposta do login de convidado (email/mac):', response)),
@@ -125,28 +125,23 @@ export class CaptivePortalService {
   }
 
   /**
-   * Manipulador de erros HTTP.
-   * Extrai a mensagem de erro da resposta do backend.
    * @param error O erro HTTP.
    * @returns Observable que lança o erro.
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Ocorreu um erro desconhecido!';
     if (error.error instanceof ErrorEvent) {
-      // Erro do lado do cliente ou de rede
       errorMessage = `Erro: ${error.error.message}`;
     } else {
-      // O backend retornou um código de resposta malsucedido.
-      // O corpo do erro pode conter a mensagem real do backend.
       console.error(
         `Código do erro do backend ${error.status}, ` +
         `corpo do erro: ${JSON.stringify(error.error)}`);
 
-      // Tentando extrair a mensagem de erro da sua estrutura ErrorResponseDTO
-      if (error.error && error.error.description) { // 'description' é o responseDescription
+
+      if (error.error && error.error.description) {
         errorMessage = `${error.error.description}: ${error.error.payload || error.error.errorDescription || ''}`;
       } else if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error; // Caso o backend retorne uma string simples de erro
+        errorMessage = error.error;
       } else {
         errorMessage = `Erro ${error.status}: ${error.message}`;
       }
