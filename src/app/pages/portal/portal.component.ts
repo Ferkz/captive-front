@@ -122,31 +122,37 @@ export class PortalComponent implements OnInit, OnDestroy {
     const payloadString = response.payload || '';
     const finalRedirectUrl = response.redirectUrl
 
-    if (response.responseDescription) {
-        if (descriptionLower === "already active"){
-            this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
-        } else if (descriptionLower === "registration updated") {
-            this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
+    console.log('URL para redirect:', finalRedirectUrl);
+     if (response.responseDescription) {
+      if (descriptionLower === "already active") {
+        this.successMessage = payloadString || 'Seu dispositivo já está autorizado e com uma sessão ativa.';
+      } else if (descriptionLower === "registration updated") {
+        this.successMessage = payloadString || 'Cadastro atualizado e acesso à internet liberado!';
+      } else if (descriptionLower === "registration successful") {
+        this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
+      } else if (descriptionLower === 'cpf already registered') {
+        this.successMessage = payloadString || 'Usuário já possui um cadastro. Por favor, use a opção Login.';
+        this.router.navigate(['/login'], { queryParams: this.unifiOriginalParams });
+        return; // impede redirecionamento depois disso
+      } else {
+        this.successMessage = payloadString || descriptionLower || 'Operação realizada com sucesso.';
+      }
 
-        } else if (descriptionLower === "registration successful") {
-            this.successMessage = payloadString || 'Cadastro e autorização realizados com sucesso! Você já pode navegar.';
-        } else if(descriptionLower ==='Cpf Already Registered'){
-          this.successMessage = payloadString || 'Usuario já possui um cadastro. Por favor, use a opção Login.'
-          this.router.navigate(['/login'], { queryParams: this.unifiOriginalParams })
-        }
-        else {
-            this.successMessage = payloadString || descriptionLower || 'Operação realizada com sucesso.';
-        }
-        console.log('URL para redirect', finalRedirectUrl);
+      this.snackBar.open(this.successMessage || 'Acesso liberado.', 'OK', {
+        duration: 7000,
+        panelClass: ['success-snackbar']
+      });
+      this.cadastroPortalForm.disable();
 
-        this.snackBar.open(this.successMessage || 'Acesso liberado.', 'OK', { duration: 7000, panelClass: ['success-snackbar'] });
-        this.cadastroPortalForm.disable();
-        setTimeout(() => {
-            window.location.href = finalRedirectUrl || 'https://www.google.com';
-        }, 2500);
+      setTimeout(() => {
+        window.location.href = finalRedirectUrl || 'https://www.google.com';
+      }, 2500);
     } else {
-        this.erro = payloadString || descriptionLower || 'Falha na operação de cadastro.';
-        this.snackBar.open(this.erro|| 'Error desconhecido' , 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
+      this.erro = payloadString || descriptionLower || 'Falha na operação de cadastro.';
+      this.snackBar.open(this.erro || 'Erro desconhecido', 'Fechar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
     }
   },
   error: (err: any) => {
