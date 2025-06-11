@@ -23,6 +23,6 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     this.snackBar.open('Acesso negado. Por favor, faça login.', 'Fechar', { duration: 3000 });
-    return this.router.createUrlTree(['/login-admin'], { queryParams: { returnUrl: state.url } });
+    return this.router.createUrlTree(['/auth/admin/login'], { queryParams: { returnUrl: state.url } });
   }
 }

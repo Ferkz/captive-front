@@ -3,11 +3,13 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from '../../app/auth/services/auth.service';
 import { environment } from '../../environments/environment';
+import { error } from 'console';
 
 const BACKEND_BASE_URL = environment.backendApiUrl;
 @Injectable()
@@ -28,6 +30,14 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) =>{
+        if(error.status ===401){
+          console.error('Sessão invalida no servidor');
+          this.authService.logout()
+        }
+        return throwError(()=>{error})
+      })
+    )
   }
 }

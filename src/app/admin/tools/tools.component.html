@@ -1,1 +1,38 @@
-<p>tools works!</p>
+<h1>Gerenciar Termos e Política</h1>
+<div class="tools-container">
+  <mat-card>
+    <mat-card-title>Termos de Uso</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="termsForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Conteúdo dos Termos de Uso</mat-label>
+          <textarea matInput formControlName="content" rows="10"></textarea>
+          <mat-error *ngIf="termsForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="saveTerms('TERMS_OF_USE', termsForm)" [disabled]="isLoading || termsForm.invalid">
+        Salvar Termos de Uso
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card style="margin-top: 20px;">
+    <mat-card-title>Política de Privacidade</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="privacyForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Conteúdo da Política de Privacidade</mat-label>
+          <textarea matInput formControlName="content" rows="10"></textarea>
+          <mat-error *ngIf="privacyForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="saveTerms('PRIVACY_POLICY', privacyForm)" [disabled]="isLoading || privacyForm.invalid">
+        Salvar Política de Privacidade
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

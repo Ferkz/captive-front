@@ -16,6 +16,10 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDialogModule} from '@angular/material/dialog';
+
+
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { HomeComponent } from './pages/home/home.component';
+import { TermsModalComponent } from './shared/terms-modal/terms-modal.component';
 
 
 
@@ -32,6 +37,7 @@ import { HomeComponent } from './pages/home/home.component';
     PortalComponent,
     LoginComponent,
     HomeComponent,
+    TermsModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +55,9 @@ import { HomeComponent } from './pages/home/home.component';
     MatListModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    AuthModule
+    AuthModule,
+    MatExpansionModule,
+    MatDialogModule
 
   ],
   providers: [

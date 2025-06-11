@@ -9,7 +9,7 @@
         <mat-label class="nome-label">Nome Completo</mat-label>
         <input matInput formControlName="nome" placeholder="Nome Completo">
         <mat-error *ngIf="f['nome'].hasError('required')">Nome é obrigatório.</mat-error>
-        <mat-error *ngIf="f['nome'].hasError('minlength') || f['nome'].hasError('maxlength')">Nome deve ter entre 3 e 66 caracteres.</mat-error>
+        <mat-error *ngIf="f['nome'].hasError('minlength') || f['nome'].hasError('maxlength')">Nome deve ter entre 7 e 66 caracteres.</mat-error>
         <mat-error *ngIf="f['nome'].hasError('pattern')">Insira um nome válido</mat-error>
       </mat-form-field>
 
@@ -18,7 +18,7 @@
         <input matInput formControlName="cpf" placeholder="Insira seu CPF">
         <mat-error *ngIf="f['cpf'].hasError('required')">CPF é obrigatório.</mat-error>
         <mat-error *ngIf="f['cpf'].hasError('minlength') || f['cpf'].hasError('maxlength')">CPF precisa conter 11 caracteres.</mat-error>
-        <mat-error *ngIf="f['cpf'].hasError('pattern')">Insira um nome CPF válido.</mat-error>
+        <mat-error *ngIf="f['cpf'].hasError('cpfInvalido')">Insira um nome CPF válido.</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field email" appearance="outline">
@@ -26,18 +26,19 @@
         <input matInput type="email" formControlName="email" placeholder="seu.email@exemplo.com">
         <mat-error *ngIf="f['email'].hasError('required')">Email é obrigatório.</mat-error>
         <mat-error *ngIf="f['email'].hasError('email')">Formato de email inválido.</mat-error>
+        <mat-error *ngIf="f['email'].hasError('maxlength')">Email muito longo.</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-field telefone" appearance="outline">
         <mat-label class="telefone-label">Telefone</mat-label>
         <input matInput type="tel" formControlName="telefone" placeholder="(XX) XXXXX-XXXX">
-         <mat-error *ngIf="f['telefone'].hasError('required')">Telefone é obrigatório.</mat-error>
-         <mat-error *ngIf="f['telefone'].hasError('pattern')">Formato de telefone inválido.</mat-error>
+          <mat-error *ngIf="f['telefone'].hasError('required')">Telefone é obrigatório.</mat-error>
+          <mat-error *ngIf="f['telefone'].hasError('pattern')">Formato de telefone inválido.</mat-error>
       </mat-form-field>
 
       <div class="form-field terms-checkbox">
         <mat-checkbox formControlName="acceptTou" color="primary">
-          Eu li e aceito os <a href="/termos-de-uso-portal" target="_blank">Termos de Uso</a> e a <a href="/politica-de-privacidade-portal" target="_blank">Política de Privacidade</a>.
+          Eu li e aceito os <a href="javascript:void(0)" (click)="openTermsModal()">Termos de Uso</a> e a <a href="javascript:void(0)" (click)="openPrivacyModal()">Política de Privacidade</a>.
         </mat-checkbox>
         <mat-error *ngIf="f['acceptTou'].hasError('required') && (f['acceptTou'].touched || cadastroPortalForm)" class="tou-error">
           Você deve aceitar os termos.
@@ -48,19 +49,21 @@
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         {{ isLoading ? 'Enviando...' : 'Conectar à Rede Wi-Fi' }}
       </button>
-    </form>
-    <div class="login">
-      <span>Já tem cadastro ?</span>
-      <button mat-raised-button color="accent" class="btn-login" (click)="redirectUserLogin()">Login</button>
-    </div>
-    <div *ngIf="successMessage" class="success-message-box alert alert-success mt-3">
-      <h3>{{successMessage}}</h3>
-      <p *ngIf="originalRedirectUrl">Você será redirecionado para: {{originalRedirectUrl}}</p>
-      <p *ngIf="!originalRedirectUrl">Você já pode começar a navegar!</p>
-       <div class="spinner-border text-primary mt-2" role="status" *ngIf="originalRedirectUrl">
-        <span class="visually-hidden">Redirecionando...</span>
-      </div>
-    </div>
 
+      <div class="login">
+        <span>Já tem cadastro ?</span>
+        <button mat-raised-button color="accent" class="btn-login" (click)="redirectUserLogin()">Login</button>
+      </div>
+    </form>
+
+    <p *ngIf="!termsOfUseContent">Carregando Termos de Uso...</p>
+    <p *ngIf="!privacyPolicyContent">Carregando Política de Privacidade...</p>
+
+  </div> <div *ngIf="successMessage" class="success-message-box alert alert-success mt-3">
+    <h3>{{successMessage}}</h3>
+    <p>Você já pode começar a navegar!</p>
+    <div class="spinner-border text-primary mt-2" role="status" aria-hidden="true">
+      <span class="visually-hidden">Redirecionando...</span>
+    </div>
   </div>
 </div>

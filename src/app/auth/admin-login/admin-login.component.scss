@@ -75,7 +75,10 @@ $error-color: #dc3545;
     }
     mat-icon {
         color: rgba($text-light, 0.7);
+    }input::placeholder{
+      color: #fff;
     }
+
   }
 
   .login-button {

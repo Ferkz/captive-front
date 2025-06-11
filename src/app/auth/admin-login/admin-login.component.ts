@@ -55,7 +55,7 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
         },
         error: (err: Error) => {
           this.isLoading = false;
-          this.errorMessage = err.message || 'Falha no login. Verifique suas credenciais.';
+          this.errorMessage = 'Falha no login. Verifique suas credenciais.';
           this.snackBar.open(this.errorMessage, 'Fechar', { duration: 5000, panelClass: ['error-snackbar'] });
         }
       });
