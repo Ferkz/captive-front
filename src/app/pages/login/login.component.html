@@ -17,7 +17,7 @@
              [ngClass]="{ 'is-invalid': glf['cpf'].touched && glf['cpf'].errors }">
       <div *ngIf="glf['cpf'].touched && glf['cpf'].errors" class="invalid-feedback">
         <div *ngIf="glf['cpf'].errors['required']">CPF é obrigatório.</div>
-        <div *ngIf="glf['cpf'].errors['cpf']">CPF inválido.</div>
+        <div *ngIf="glf['cpf'].errors['cpfInvalido']">CPF inválido.</div>
       </div>
     </div>
 

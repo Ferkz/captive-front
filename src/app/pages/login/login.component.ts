@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { CaptivePortalService, GuestLoginRequest, BackendPortalResponse } from './../../services/captive-portal.service';
+import { cpfValidator } from 'src/app/shared/validators/cpf.validator';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
 
     this.guestLoginForm = this.fb.group({
-      cpf: ['', [Validators.required,]]
+      cpf: ['', [Validators.required,cpfValidator()]]
     });
   }
 
