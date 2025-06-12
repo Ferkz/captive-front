@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { TermsAndPrivacy } from '../interfaces/tools';
 import { environment } from 'src/environments/environment';
 
-const apiUrl = `${environment.backendApiUrl}/api/admin/terms`
+const apiUrl = `${environment.backendApiUrl}/api/terms`
 @Injectable({
   providedIn: 'root'
 })
