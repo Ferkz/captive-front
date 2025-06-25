@@ -36,7 +36,7 @@ export class JwtInterceptor implements HttpInterceptor {
           console.error('Sessão invalida no servidor');
           this.authService.logout()
         }
-        return throwError(()=>{error})
+        return throwError(() => error);
       })
     )
   }

@@ -1,3 +1,5 @@
+// src/app/pages/login/login.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
@@ -6,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { CaptivePortalService, GuestLoginRequest, BackendPortalResponse } from './../../services/captive-portal.service';
 import { cpfValidator } from 'src/app/shared/validators/cpf.validator';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -33,9 +36,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private captivePortalService: CaptivePortalService
   ) {
-
     this.guestLoginForm = this.fb.group({
-      cpf: ['', [Validators.required,cpfValidator()]]
+      cpf: ['', [Validators.required, cpfValidator()]]
     });
   }
 
@@ -63,10 +65,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Atalho para acesso aos controles do formulário de LOGIN de convidado
   get glf() { return this.guestLoginForm.controls; }
 
-  // Método para submeter o formulário de LOGIN de convidado
   onSubmit(): void {
     if (this.guestLoginForm.invalid) {
       Object.values(this.guestLoginForm.controls).forEach(control => {
@@ -91,20 +91,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       accessPointMac: this.accessPointMac || undefined
     };
 
-   this.captivePortalService.guestLogin(requestData)
+    this.captivePortalService.guestLogin(requestData)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response: BackendPortalResponse) => {
           this.isLoading = false;
+          console.log('reposta do server' + response);
+
           if (response) {
             let messageToDisplay = response.description || 'Login de convidado bem-sucedido!';
 
             if (typeof response.payload === 'string' && response.payload.length > 0) {
-                messageToDisplay = response.payload;
+              messageToDisplay = response.payload;
             } else if (response.payload && response.payload.message) {
-                messageToDisplay = response.payload.message;
+              messageToDisplay = response.payload.message;
             }
-
             this.successMessage = messageToDisplay;
             console.log('Login de convidado bem-sucedido, UniFi autorizado.', response);
             if (this.originalUrl) {
@@ -119,16 +120,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           this.isLoading = false;
-          if (err.error && err.error.description) {
-            this.errorMessage = err.error.description + ': ' + (err.error.payload || '');
+          console.error('Falha na requisição (error handler):', err);
+
+          if (
+            err.description &&
+            err.description.includes('Registration Not Found')
+          ) {
+            this.errorMessage = 'Usuário não encontrado.';
           } else {
-            this.errorMessage = 'Falha no login de convidado. Verifique seu CPF ou tente novamente mais tarde.';
+            this.errorMessage = err.message || 'Erro inesperado.';
           }
-          console.error('Falha no login de convidado:', err);
         }
       });
-
   }
+
   goToRegistration(): void {
     if (!this.clientMac) {
       this.errorMessage = 'Não foi possível detectar o MAC do dispositivo para prosseguir com o cadastro.';

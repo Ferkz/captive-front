@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpParams,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 const BACKEND_BASE_URL = environment.backendApiUrl;
-
 
 export interface CaptiveLoginRequest {
   username?: string;
@@ -18,7 +21,7 @@ export interface CaptiveLoginRequest {
 export interface GuestRegistrationRequest {
   fullName: string;
   email: string;
-  cpf:string
+  cpf: string;
   phoneNumber: string;
   deviceMac: string;
   deviceIp?: string;
@@ -41,7 +44,7 @@ export interface BackendPortalResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CaptivePortalService {
   private captivePortalLoginUrl = `${BACKEND_BASE_URL}/captive/portal/login`;
@@ -49,103 +52,88 @@ export class CaptivePortalService {
   private guestRegisterUrl = `${BACKEND_BASE_URL}/portal/guest/register-and-authorize`;
   private guestLoginUrl = `${BACKEND_BASE_URL}/portal/guest/login`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
-   * Método para o login tradicional do portal cativo (com username e password).
-   * @param loginData Dados de login (username, password, mac, etc.).
-   * @returns Observable da resposta do backend.
+   * @param loginData
+   * @returns
    */
   login(loginData: CaptiveLoginRequest): Observable<BackendPortalResponse> {
-    let params = new HttpParams();
-    if (loginData.username) {
-      params = params.set('username', loginData.username);
-    }
-    if (loginData.password) {
-      params = params.set('password', loginData.password);
-    }
-    params = params.set('mac', loginData.mac);
-
-    if (loginData.ap) {
-      params = params.set('ap', loginData.ap);
-    }
-    if (loginData.ssid) {
-      params = params.set('ssid', loginData.ssid);
-    }
-
-    return this.http.post<BackendPortalResponse>(this.captivePortalLoginUrl, params)
+    return this.http
+      .post<BackendPortalResponse>(this.captivePortalLoginUrl, loginData)
       .pipe(
-        tap(response => console.log('Resposta do login do portal (username/password):', response)),
-        catchError(this.handleError)
+        tap((response) =>
+          console.log(
+            'Resposta do login do portal (username/password):',
+            response
+          )
+        ),
+        catchError((err) => this.handleError(err))
       );
   }
 
   /**
-   * Método para o registro de um novo convidado.
-   * Envia os dados como JSON para o backend.
    * @param registrationData Dados do registro do convidado.
    * @returns Observable da resposta do backend.
    */
-  registerGuest(registrationData: GuestRegistrationRequest): Observable<BackendPortalResponse> {
-    // O backend espera um @RequestBody, então enviamos o objeto JSON diretamente.
-    return this.http.post<BackendPortalResponse>(this.guestRegisterUrl, registrationData)
+  registerGuest(
+    registrationData: GuestRegistrationRequest
+  ): Observable<BackendPortalResponse> {
+    return this.http
+      .post<BackendPortalResponse>(this.guestRegisterUrl, registrationData)
       .pipe(
-        tap(response => console.log('Resposta do registro de convidado:', response)),
-        catchError(this.handleError)
+        tap((response) =>
+          console.log('Resposta do registro de convidado:', response)
+        ),
+        catchError((err) => this.handleError(err))
       );
   }
 
   /**
-   * Método para o login de um convidado já registrado (re-autenticação/liberação).
-   * Envia os dados como JSON para o backend.
-   * @param loginData Dados de login do convidado (email, mac).
-   * @returns Observable da resposta do backend.
+   * @param loginData
+   * @returns
    */
   guestLogin(loginData: GuestLoginRequest): Observable<BackendPortalResponse> {
-    return this.http.post<BackendPortalResponse>(this.guestLoginUrl, loginData)
+    return this.http
+      .post<BackendPortalResponse>(this.guestLoginUrl, loginData)
       .pipe(
-        tap(response => console.log('Resposta do login de convidado (email/mac):', response)),
-        catchError(this.handleError)
+        tap((response) =>
+          console.log('Resposta do login de convidado (cpf/mac):', response)
+        ),
+       catchError((errorDescription) => {
+         console.error('ERRO CAPTURADO no pipe do guestLogin:', errorDescription);
+         return this.handleError(errorDescription);
+       })
       );
   }
-
   /**
-   * Método para realizar o logout de um dispositivo do portal cativo.
-   * @param macAddress Endereço MAC do dispositivo a ser desautorizado.
-   * @returns Observable da resposta do backend.
+   * @param macAddress
+   * @returns
    */
   logout(macAddress: string): Observable<BackendPortalResponse> {
-    let params = new HttpParams().set('mac', macAddress);
-
-    return this.http.post<BackendPortalResponse>(this.captivePortalLogoutUrl, params)
+    const body = { mac: macAddress };
+    return this.http
+      .post<BackendPortalResponse>(this.captivePortalLogoutUrl, body)
       .pipe(
-        tap(response => console.log('Resposta do logout do portal:', response)),
-        catchError(this.handleError)
+        tap((response) => console.log('Resposta do logout do portal:', response)
+        ),
+         catchError((err) => {
+         console.error('ERRO CAPTURADO no pipe do guestLogin:', err);
+         return this.handleError(err);
+       })
       );
   }
+   private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('A função handleError recebeu o seguinte erro:', error);
 
-  /**
-   * @param error O erro HTTP.
-   * @returns Observable que lança o erro.
-   */
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Ocorreu um erro desconhecido!';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      console.error(
-        `Código do erro do backend ${error.status}, ` +
-        `corpo do erro: ${JSON.stringify(error.error)}`);
+    // Extrai a mensagem de erro da forma mais fiável possível.
+    const errorMessage = error.error?.payload || error.error?.description || 'Ocorreu uma falha. Por favor, tente novamente.';
 
-
-      if (error.error && error.error.description) {
-        errorMessage = `${error.error.description}: ${error.error.payload || error.error.errorDescription || ''}`;
-      } else if (error.error && typeof error.error === 'string') {
-        errorMessage = error.error;
-      } else {
-        errorMessage = `Erro ${error.status}: ${error.message}`;
-      }
-    }
-    return throwError(() => new Error(errorMessage));
+    // Retorna um objeto de erro estruturado que o componente pode usar.
+    return throwError(() => ({
+      message: errorMessage,
+      status: error.status,
+      originalError: error
+    }));
   }
 }
