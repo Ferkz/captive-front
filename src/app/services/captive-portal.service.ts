@@ -125,11 +125,7 @@ export class CaptivePortalService {
   }
    private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('A função handleError recebeu o seguinte erro:', error);
-
-    // Extrai a mensagem de erro da forma mais fiável possível.
     const errorMessage = error.error?.payload || error.error?.description || 'Ocorreu uma falha. Por favor, tente novamente.';
-
-    // Retorna um objeto de erro estruturado que o componente pode usar.
     return throwError(() => ({
       message: errorMessage,
       status: error.status,
