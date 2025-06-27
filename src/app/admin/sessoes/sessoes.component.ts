@@ -30,7 +30,7 @@ export class SessoesComponent implements OnInit, OnDestroy, AfterViewInit {
     'deviceMac',
     'fullName',
     'cpf',
-    'hostname',
+    'deviceName',
     'email',
     'deviceIp',
     'lastLoginOn',

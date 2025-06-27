@@ -14,6 +14,7 @@ export interface Session {
   email?: string;
   phoneNumber?: string;
   acceptedTou?: boolean;
+  deviceName: string
   valid?: boolean;
 }
 
