@@ -284,31 +284,12 @@ export class PortalComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           this.isLoading = false;
           console.error('Falha na requisição (error handler):', err);
-          if (
-            err.error &&
-            err.error.description &&
-            err.error.description.includes('Cpf Already Registered')
-          ) {
-            this.erro =
-              err.error.payload ||
-              'Este CPF já possui um cadastro. Por favor, use a opção Login.';
-            this.snackBar.open(this.erro || 'Erro desconhecido.', 'Fechar', {
-              duration: 7000,
-              panelClass: ['warning-snackbar'],
-            });
-            setTimeout(() => {
-              this.router.navigate(['/login'], {
-                queryParams: this.unifiOriginalParams,
-              });
-            }, 2000);
-          } else {
-            this.erro =
-              err.message ||
-              'Falha crítica ao realizar o cadastro. Tente novamente mais tarde.';
-            this.snackBar.open(this.erro || 'Error desconhecido', 'Fechar', {
-              duration: 5000,
-              panelClass: ['error-snackbar'],
-            });
+          if (err){
+            this.erro= err.payload
+            this.snackBar.open (this.erro || 'Error desconhecido','Fechar',{
+              duration:5000,
+              panelClass:['error-snackbar']
+            })
           }
         },
       });
