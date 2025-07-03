@@ -27,11 +27,11 @@
         <mat-card-title>Info do Sistema</mat-card-title>
       </mat-card-header>
       <mat-card-content class="system-info">
-        <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
-        <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
-        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{
+        <p>Hostname {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
+        <p>IP {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
+        <p>OS {{ dashboardData.systemInfo.operatingSystem }} {{
           dashboardData.systemInfo.operatingSystemVersion }}</p>
-        <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
+        <p>Java {{ dashboardData.systemInfo.javaVersion }}</p>
       </mat-card-content>
     </mat-card>
 
@@ -41,10 +41,10 @@
         <mat-card-title>Uso de Memória</mat-card-title>
       </mat-card-header>
       <mat-card-content class="system-info">
-        <p><strong>Usada:</strong> {{ formatBytes(dashboardData.systemMemory.used) }}</p>
-        <p><strong>Livre:</strong> {{ formatBytes(dashboardData.systemMemory.free) }}</p>
-        <p><strong>Total:</strong> {{ formatBytes(dashboardData.systemMemory.total) }}</p>
-        <p><strong>Máxima:</strong> {{ formatBytes(dashboardData.systemMemory.max) }}</p>
+        <p>Usada {{ formatBytes(dashboardData.systemMemory.used) }}</p>
+        <p>Livre {{ formatBytes(dashboardData.systemMemory.free) }}</p>
+        <p>Total {{ formatBytes(dashboardData.systemMemory.total) }}</p>
+        <p>Máxima {{ formatBytes(dashboardData.systemMemory.max) }}</p>
       </mat-card-content>
     </mat-card>
 
