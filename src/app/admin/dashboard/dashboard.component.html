@@ -11,12 +11,14 @@
   </div>
 
   <div *ngIf="!isLoading && !error" class="dashboard-grid">
+
     <mat-card class="dashboard-card">
       <mat-card-header>
         <mat-card-title>Sessões Ativas</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A' }}</p>
+        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A'
+          }}</p>
       </mat-card-content>
     </mat-card>
 
@@ -24,51 +26,50 @@
       <mat-card-header>
         <mat-card-title>Info do Sistema</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <p>Hostname: {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
-        <p>IP: {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
-        <p>OS: {{ dashboardData.systemInfo.operatingSystem }} {{ dashboardData.systemInfo.operatingSystemVersion }}</p>
-        <p>Java: {{ dashboardData.systemInfo.javaVersion }}</p>
+      <mat-card-content class="system-info">
+        <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
+        <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
+        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{
+          dashboardData.systemInfo.operatingSystemVersion }}</p>
+        <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
       </mat-card-content>
     </mat-card>
+
 
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemMemory">
       <mat-card-header>
-        <mat-card-title>Uso de Memória do Servidor</mat-card-title>
+        <mat-card-title>Uso de Memória</mat-card-title>
       </mat-card-header>
-      <mat-card-content>
-        <p>Usada: {{ formatBytes(dashboardData.systemMemory.used) }}</p>
-        <p>Livre: {{ formatBytes(dashboardData.systemMemory.free) }}</p>
-        <p>Total Alocada: {{ formatBytes(dashboardData.systemMemory.total) }}</p>
-        <p>Máxima: {{ formatBytes(dashboardData.systemMemory.max) }}</p>
+      <mat-card-content class="system-info">
+        <p><strong>Usada:</strong> {{ formatBytes(dashboardData.systemMemory.used) }}</p>
+        <p><strong>Livre:</strong> {{ formatBytes(dashboardData.systemMemory.free) }}</p>
+        <p><strong>Total:</strong> {{ formatBytes(dashboardData.systemMemory.total) }}</p>
+        <p><strong>Máxima:</strong> {{ formatBytes(dashboardData.systemMemory.max) }}</p>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="dashboard-card" *ngIf="dashboardData.osCounts && dashboardData.osCounts.length > 0">
+
+    <mat-card class="dashboard-card" *ngIf="osChartData">
       <mat-card-header>
-        <mat-card-title>Sessões por Sistema Operacional</mat-card-title>
+        <mat-card-title class="chart-title">Sessões por S.O.</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <ul>
-          <li *ngFor="let item of dashboardData.osCounts">
-            {{ item.os || item.name }}: {{ item.quantity }}
-          </li>
-        </ul>
+        <div class="chart-container">
+          <canvas baseChart [data]="osChartData" [options]="doughnutChartOptions" type="doughnut">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
-
-     <mat-card class="dashboard-card" *ngIf="dashboardData.browserCounts && dashboardData.browserCounts.length > 0">
+    <mat-card class="dashboard-card" *ngIf="browserChartData">
       <mat-card-header>
-        <mat-card-title>Sessões por Navegador</mat-card-title>
+        <mat-card-title class="chart-title">Sessões por Navegador</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <ul>
-          <li *ngFor="let item of dashboardData.browserCounts">
-            {{ item.browserName }}: {{ item.quantity }}
-          </li>
-        </ul>
+        <div class="chart-container">
+          <canvas baseChart [data]="browserChartData" [options]="doughnutChartOptions" type="doughnut">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
-
   </div>
 </div>

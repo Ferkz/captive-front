@@ -13,13 +13,9 @@ RUN npm install
 COPY . .
 
 RUN ng build --configuration=production
-
-
 FROM nginx:stable-alpine
-
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/captive-portal /usr/share/nginx/html
 
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

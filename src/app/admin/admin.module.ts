@@ -20,6 +20,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdministradoresComponent } from './administradores/administradores.component';
@@ -59,7 +60,8 @@ import { ConfirmDialogComponent } from './confirm/confirm-dialog/confirm-dialog.
     MatButtonModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatSortModule
+    MatSortModule,
+    NgChartsModule
   ]
 })
 export class AdminModule { }
