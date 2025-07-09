@@ -1,38 +1,76 @@
-<h1>Gerenciar Termos e Política</h1>
-<div class="tools-container">
-  <mat-card>
-    <mat-card-title>Termos de Uso</mat-card-title>
-    <mat-card-content>
-      <form [formGroup]="termsForm">
-        <mat-form-field appearance="outline">
-          <mat-label>Conteúdo dos Termos de Uso</mat-label>
-          <textarea matInput formControlName="content" rows="10"></textarea>
-          <mat-error *ngIf="termsForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
-        </mat-form-field>
-      </form>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="accent" (click)="saveTerms('TERMS_OF_USE', termsForm)" [disabled]="isLoading || termsForm.invalid">
-        Salvar Termos de Uso
-      </button>
-    </mat-card-actions>
-  </mat-card>
+<h1>Gerenciar Ferramentas e Configurações</h1>
+<div class="tools-grid-container">
+  <div class="settings-column">
+    <mat-card>
+      <mat-card-title class="card-title-container">
+        <mat-icon>timer</mat-icon>
+        <span>Tempo de Conexão Padrão</span>
+      </mat-card-title>
+      <mat-card-subtitle>Defina a duração padrão da sessão para novos usuários em minutos.</mat-card-subtitle>
+      <mat-card-content>
+        <form [formGroup]="connectionTimeForm" class="settings-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Duração (10-1440 minutos)</mat-label>
+            <input matInput type="number" formControlName="duration" min="10" max="1440" placeholder="Ex: 240">
+            <mat-error *ngIf="connectionTimeForm.get('duration')?.hasError('required')">
+              O tempo é obrigatório.
+            </mat-error>
+            <mat-error *ngIf="connectionTimeForm.get('duration')?.hasError('min')">
+              O tempo mínimo é 10 minutos.
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="saveConnectionTime()" [disabled]="isLoading || connectionTimeForm.invalid">
+          <mat-icon>save</mat-icon>
+          Salvar Tempo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div class="terms-column">
+    <mat-card>
+      <mat-card-title class="card-title-container">
+        <mat-icon>gavel</mat-icon>
+        <span>Termos de Uso</span>
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="termsForm">
+          <mat-form-field appearance="outline">
+            <mat-label>Conteúdo dos Termos de Uso</mat-label>
+            <textarea matInput formControlName="content" rows="10"></textarea>
+            <mat-error *ngIf="termsForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="saveTerms('TERMS_OF_USE', termsForm)" [disabled]="isLoading || termsForm.invalid">
+          Salvar Termos de Uso
+        </button>
+      </mat-card-actions>
+    </mat-card>
 
-  <mat-card style="margin-top: 20px;">
-    <mat-card-title>Política de Privacidade</mat-card-title>
-    <mat-card-content>
-      <form [formGroup]="privacyForm">
-        <mat-form-field appearance="outline">
-          <mat-label>Conteúdo da Política de Privacidade</mat-label>
-          <textarea matInput formControlName="content" rows="10"></textarea>
-          <mat-error *ngIf="privacyForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
-        </mat-form-field>
-      </form>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="accent" (click)="saveTerms('PRIVACY_POLICY', privacyForm)" [disabled]="isLoading || privacyForm.invalid">
-        Salvar Política de Privacidade
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card>
+      <mat-card-title class="card-title-container">
+        <mat-icon>shield</mat-icon>
+        <span>Política de Privacidade</span>
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="privacyForm">
+          <mat-form-field appearance="outline">
+            <mat-label>Conteúdo da Política de Privacidade</mat-label>
+            <textarea matInput formControlName="content" rows="10"></textarea>
+            <mat-error *ngIf="privacyForm.controls['content'].hasError('required')">Conteúdo é obrigatório.</mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="saveTerms('PRIVACY_POLICY', privacyForm)" [disabled]="isLoading || privacyForm.invalid">
+          Salvar Política de Privacidade
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
 </div>

@@ -6,3 +6,7 @@ export interface TermsAndPrivacy{
   content:string
   lastUpdate?: string;
 }
+export interface Setting{
+  name: string
+  value: number;
+}

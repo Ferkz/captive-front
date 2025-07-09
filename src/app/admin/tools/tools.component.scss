@@ -1,92 +1,56 @@
+:host {
+  display: block;
+  padding: 24px;
+}
 
-$primarycolor: #00164a;
-.tools-container {
-  padding: 20px;
+h1 {
+  font-size: 1.875rem;
+  font-weight: 400;
+  color: #1f2937;
+  margin-bottom: 24px;
+}
+.tools-grid-container {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+.terms-column {
   display: flex;
   flex-direction: column;
-
+  gap: 24px;
 }
 
 mat-card {
-  width: 80%;
-  max-width: 400px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 4px;
-  mat-card-title {
-    margin-bottom: 15px;
-    font-size: 1.8em;
-    color: $primarycolor;
-    text-align: left;
-  }
-
-  mat-card-content {
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      width: 100%;
-    }
-
-    mat-form-field {
-      width: 20vw;
-      min-width: 280px;
-      max-width: 400px;
-      margin-bottom: 15px;
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-  }
-
-  mat-card-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 10px;
-    padding-right: 15px;
-  }
+  display: flex;
+  flex-direction: column;
 }
 
-@media screen and (max-width: 768px) {
-  .tools-container {
-    padding: 10px;
-  }
-
-  mat-card {
-    width: 95%;
-    padding: 15px;
-  }
-
-  mat-card-title {
-    font-size: 1.5em;
-  }
-
-  mat-card-content {
-    form {
-
-    }
-    mat-form-field {
-      width: 90vw;
-      max-width: 100%;
-      min-width: unset;
-    }
-  }
-}
-.spinner-border {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  vertical-align: text-bottom;
-  border: 0.1em solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  -webkit-animation: spinner-border .75s linear infinite;
-  animation: spinner-border .75s linear infinite;
+mat-card-content {
+  flex-grow: 1;
 }
 
-@keyframes spinner-border {
-  to { transform: rotate(360deg); }
+.card-title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4b5563;
+  font-weight: 400;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.settings-form {
+  padding-top: 16px;
+}
+
+mat-card-actions {
+  margin-top: auto;
+  padding: 8px 16px !important;
+  display: flex;
+  justify-content: flex-end;
 }

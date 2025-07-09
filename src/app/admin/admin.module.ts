@@ -18,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
+import {MatSliderModule} from '@angular/material/slider';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
@@ -61,6 +63,7 @@ import { ConfirmDialogComponent } from './confirm/confirm-dialog/confirm-dialog.
     ReactiveFormsModule,
     MatCheckboxModule,
     MatSortModule,
+    MatSliderModule,
     NgChartsModule
   ]
 })
