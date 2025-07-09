@@ -11,62 +11,75 @@
   </div>
 
   <div *ngIf="!isLoading && !error" class="dashboard-grid">
-
     <mat-card class="dashboard-card">
       <mat-card-header>
-        <mat-card-title>Sessões Ativas</mat-card-title>
+        <mat-card-title class="card-title-container">
+          <mat-icon>wifi</mat-icon>
+          <span>Sessões Ativas</span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A'
-          }}</p>
+        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A' }}</p>
       </mat-card-content>
     </mat-card>
-
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemInfo">
       <mat-card-header>
-        <mat-card-title>Info do Sistema</mat-card-title>
+        <mat-card-title class="card-title-container">
+          <mat-icon>info_outline</mat-icon>
+          <span>Info do Sistema</span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content class="system-info">
-        <p>Hostname {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
-        <p>IP {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
-        <p>OS {{ dashboardData.systemInfo.operatingSystem }} {{
-          dashboardData.systemInfo.operatingSystemVersion }}</p>
-        <p>Java {{ dashboardData.systemInfo.javaVersion }}</p>
+        <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
+        <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
+        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{ dashboardData.systemInfo.operatingSystemVersion }}</p>
+        <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
       </mat-card-content>
     </mat-card>
-
-
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemMemory">
       <mat-card-header>
-        <mat-card-title>Uso de Memória</mat-card-title>
+        <mat-card-title class="card-title-container">
+          <mat-icon>memory</mat-icon>
+          <span>Uso de Memória</span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content class="system-info">
-        <p>Usada {{ formatBytes(dashboardData.systemMemory.used) }}</p>
-        <p>Livre {{ formatBytes(dashboardData.systemMemory.free) }}</p>
-        <p>Total {{ formatBytes(dashboardData.systemMemory.total) }}</p>
-        <p>Máxima {{ formatBytes(dashboardData.systemMemory.max) }}</p>
+        <p><strong>Usada:</strong> {{ formatBytes(dashboardData.systemMemory.used) }}</p>
+        <p><strong>Livre:</strong> {{ formatBytes(dashboardData.systemMemory.free) }}</p>
+        <p><strong>Total:</strong> {{ formatBytes(dashboardData.systemMemory.total) }}</p>
+        <p><strong>Máxima:</strong> {{ formatBytes(dashboardData.systemMemory.max) }}</p>
       </mat-card-content>
     </mat-card>
-
-
     <mat-card class="dashboard-card" *ngIf="osChartData">
       <mat-card-header>
-        <mat-card-title class="chart-title">Sessões por S.O.</mat-card-title>
+        <mat-card-title class="card-title-container chart-title">
+          <mat-icon>pie_chart_outline</mat-icon>
+          <span>Sessões por S.O.</span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart [data]="osChartData" [options]="doughnutChartOptions" type="doughnut">
+          <canvas baseChart
+            [data]="osChartData"
+            [options]="doughnutChartOptions"
+            type="doughnut">
           </canvas>
         </div>
       </mat-card-content>
     </mat-card>
     <mat-card class="dashboard-card" *ngIf="browserChartData">
       <mat-card-header>
-        <mat-card-title class="chart-title">Sessões por Navegador</mat-card-title>
+        <mat-card-title class="card-title-container chart-title">
+          <mat-icon>public</mat-icon>
+          <span>Sessões por Navegador</span>
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart [data]="browserChartData" [options]="doughnutChartOptions" type="doughnut">
+          <canvas baseChart
+            [data]="browserChartData"
+            [options]="doughnutChartOptions"
+            type="doughnut">
           </canvas>
         </div>
       </mat-card-content>

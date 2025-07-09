@@ -1,10 +1,12 @@
 :host {
   display: block;
   padding: 24px;
+  background-color: #f8f9fa;
 }
 
 .dashboard-container h1 {
-  font-size: 1.875rem; /* 30px */
+  font-size: 1.875rem;
+  font-weight: 500;
   color: #1f2937;
   margin-bottom: 24px;
 }
@@ -25,22 +27,39 @@
 }
 
 .dashboard-card {
+  border-radius: 12px;
   transition: all 0.3s ease-in-out;
-
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
 }
 
 .mat-card-header {
   padding-bottom: 16px;
 }
+.card-title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 
-.mat-card-title {
-  color: #4b5563;
-  font-weight: 500;
+  mat-icon {
+    color: #4b5563;
+  }
+
+  span {
+    color: #4b5563;
+    font-weight: 600;
+  }
 }
 
+.chart-title {
+  justify-content: center;
+}
 .metric {
-  font-size: 3rem; /* 48px */
-
+  font-size: 3rem;
+  font-weight: 700;
   text-align: center;
   color: #2563eb;
   line-height: 1;
@@ -50,11 +69,6 @@
 .system-info p {
   margin: 4px 0;
   color: #374151;
-}
-
-.chart-title {
-  width: 100%;
-  text-align: center;
 }
 
 .chart-container {

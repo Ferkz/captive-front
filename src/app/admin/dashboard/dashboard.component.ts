@@ -3,37 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ChartConfiguration, ChartData } from 'chart.js';
-
-export interface SystemMemory {
-  total?: number;
-  free?: number;
-  used?: number;
-  max?: number;
-}
-
-export interface SystemInfo {
-  hostname?: string;
-  ipAddress?: string;
-  operatingSystem?: string;
-  operatingSystemVersion?: string;
-  javaVersion?: string;
-}
-
-export interface CountData {
-  name?: string;
-  os?: string;
-  browserName?: string;
-  quantity?: number;
-}
-
-export interface AdminDashboardData {
-  systemMemory?: SystemMemory;
-  systemInfo?: SystemInfo;
-  osCounts?: CountData[];
-  browserCounts?: CountData[];
-  validSessionsCount?: number;
-}
+import { Chart, ChartConfiguration, ChartData } from 'chart.js';
+import { AdminDashboardData, CountData, SystemInfo, SystemMemory } from './interfaces/dashboard';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const INFO_API_BASE_URL = `${environment.backendApiUrl}/api/admin/info`;
 
@@ -61,6 +33,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
           padding: 15,
         },
       },
+      datalabels:{
+        formatter: (value, ctx) =>{
+          const dataArr = ctx.chart.data.datasets[0].data as number [];
+          const sum = dataArr.reduce((a,b)=> a+b,0);
+          if(sum ===0){
+            return '0%'
+          }
+          const percentage = ((value* 100) / sum).toFixed(1)+ '%'
+          return ((value * 100) / sum) > 5 ? percentage: '';
+        },
+        color: '#fff',
+        font:{
+          weight:'bold',
+          size: 12,
+        },
+        textStrokeColor: 'black',
+        textStrokeWidth: 1
+      }
     },
   };
 
@@ -69,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    Chart.register(ChartDataLabels)
     this.loadDashboardData();
   }
 
@@ -199,6 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    Chart.unregister(ChartDataLabels)
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
