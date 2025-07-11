@@ -4,10 +4,17 @@ import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Chart, ChartConfiguration, ChartData } from 'chart.js';
-import { AdminDashboardData, CountData, SystemInfo, SystemMemory } from './interfaces/dashboard';
+import {
+  AdminDashboardData,
+  CountData,
+  DeviceStatsDTO,
+  SystemInfo,
+  SystemMemory,
+} from './interfaces/dashboard';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const INFO_API_BASE_URL = `${environment.backendApiUrl}/api/admin/info`;
+const DEVICES_API_BASE_URL = `${environment.backendApiUrl}/api/admin/devices`;
 
 @Component({
   selector: 'app-dashboard',
@@ -33,24 +40,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
           padding: 15,
         },
       },
-      datalabels:{
-        formatter: (value, ctx) =>{
-          const dataArr = ctx.chart.data.datasets[0].data as number [];
-          const sum = dataArr.reduce((a,b)=> a+b,0);
-          if(sum ===0){
-            return '0%'
+      datalabels: {
+        formatter: (value, ctx) => {
+          const dataArr = ctx.chart.data.datasets[0].data as number[];
+          const sum = dataArr.reduce((a, b) => a + b, 0);
+          if (sum === 0) {
+            return '0%';
           }
-          const percentage = ((value* 100) / sum).toFixed(1)+ '%'
-          return ((value * 100) / sum) > 5 ? percentage: '';
+          const percentage = ((value * 100) / sum).toFixed(1) + '%';
+          return (value * 100) / sum > 5 ? percentage : '';
         },
         color: '#fff',
-        font:{
-          weight:'bold',
+        font: {
+          weight: 'bold',
           size: 12,
         },
         textStrokeColor: 'black',
-        textStrokeWidth: 1
-      }
+        textStrokeWidth: 1,
+      },
     },
   };
 
@@ -59,7 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    Chart.register(ChartDataLabels)
+    Chart.register(ChartDataLabels);
     this.loadDashboardData();
   }
 
@@ -83,17 +90,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       browserCounts: this.http.get<{ payload: CountData[] }>(
         `${INFO_API_BASE_URL}/sessions/browser-count`
       ),
+      deviceStats: this.http.get<DeviceStatsDTO>(
+        `${DEVICES_API_BASE_URL}/stats`
+      ),
     })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (results) => {
-
           this.dashboardData = {
             validSessionsCount: results.validSessionsCount.payload,
             systemMemory: results.systemMemory.payload,
             systemInfo: results.systemInfo.payload,
             osCounts: results.osCounts.payload,
             browserCounts: results.browserCounts.payload,
+            deviceStats: results.deviceStats,
           };
 
           this.prepareChartData();
@@ -188,9 +198,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
-
   ngOnDestroy(): void {
-    Chart.unregister(ChartDataLabels)
+    Chart.unregister(ChartDataLabels);
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

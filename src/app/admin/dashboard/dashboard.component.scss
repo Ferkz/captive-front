@@ -4,9 +4,9 @@
   background-color: #f8f9fa;
 }
 
-.dashboard-container h1 {
+h1 {
   font-size: 1.875rem;
-  font-weight: 500;
+  font-weight: 700;
   color: #1f2937;
   margin-bottom: 24px;
 }
@@ -22,6 +22,7 @@
 
 .dashboard-grid {
   display: grid;
+  // Ajustado para um layout mais flexível
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
 }
@@ -38,6 +39,7 @@
 .mat-card-header {
   padding-bottom: 16px;
 }
+
 .card-title-container {
   display: flex;
   align-items: center;
@@ -57,6 +59,7 @@
 .chart-title {
   justify-content: center;
 }
+
 .metric {
   font-size: 3rem;
   font-weight: 700;
@@ -76,4 +79,42 @@
   height: 250px;
   width: 100%;
   margin-top: 16px;
+}
+
+// Estilos para o novo card de estatísticas
+.stats-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  padding-top: 16px;
+  width: 100%;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.stat-item.total .stat-value {
+  color: #1f2937;
+}
+
+.stat-item.online .stat-value {
+  color: #16a34a;
+}
+
+.stat-item.offline .stat-value {
+  color: #dc2626;
 }

@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  <h1>Dashboard Administrativo</h1>
+  <h1>Análise de Dados</h1>
 
   <div *ngIf="isLoading" class="loading-indicator">
     <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
@@ -19,7 +19,33 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A' }}</p>
+        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A'
+          }}</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="dashboard-card" *ngIf="dashboardData.deviceStats">
+      <mat-card-header>
+        <mat-card-title class="card-title-container">
+          <mat-icon>router</mat-icon>
+          <span>Dispositivos</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="stats-content">
+        <div class="stat-item total">
+          <span class="stat-label"><strong>Total: </strong></span>
+          <span class="stat-value">{{ dashboardData.deviceStats.totalDevices }}</span>
+
+        </div>
+        <div class="stat-item online">
+          <span class="stat-label"><strong>Online: </strong></span>
+          <span class="stat-value">{{ dashboardData.deviceStats.onlineDevices }}</span>
+
+        </div>
+        <div class="stat-item offline">
+
+          <span class="stat-label"><strong>Offline: </strong></span>
+          <span class="stat-value">{{ dashboardData.deviceStats.offlineDevices }}</span>
+        </div>
       </mat-card-content>
     </mat-card>
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemInfo">
@@ -32,7 +58,8 @@
       <mat-card-content class="system-info">
         <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
         <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
-        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{ dashboardData.systemInfo.operatingSystemVersion }}</p>
+        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{
+          dashboardData.systemInfo.operatingSystemVersion }}</p>
         <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
       </mat-card-content>
     </mat-card>
@@ -59,10 +86,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart
-            [data]="osChartData"
-            [options]="doughnutChartOptions"
-            type="doughnut">
+          <canvas baseChart [data]="osChartData" [options]="doughnutChartOptions" type="doughnut">
           </canvas>
         </div>
       </mat-card-content>
@@ -76,10 +100,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart
-            [data]="browserChartData"
-            [options]="doughnutChartOptions"
-            type="doughnut">
+          <canvas baseChart [data]="browserChartData" [options]="doughnutChartOptions" type="doughnut">
           </canvas>
         </div>
       </mat-card-content>

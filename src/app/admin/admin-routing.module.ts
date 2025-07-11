@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdministradoresComponent } from './administradores/administradores.component';
 import { ToolsComponent } from './tools/tools.component';
 import { AccessLogsComponent } from './access-logs/access-logs.component';
+import { DevicesComponent } from './devices/devices.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
       {path: 'sessoes', component: SessoesComponent},
       { path:'administradores', component: AdministradoresComponent},
       { path: 'logs', component: AccessLogsComponent},
-      { path: 'tools', component: ToolsComponent}
+      { path: 'tools', component: ToolsComponent},
+      { path:'devices', component: DevicesComponent }
 
     ]
   }

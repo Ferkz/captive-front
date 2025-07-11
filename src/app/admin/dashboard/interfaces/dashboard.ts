@@ -22,6 +22,11 @@ export interface CountData {
   browserName?: string;
   quantity?: number;
 }
+export interface DeviceStatsDTO {
+  totalDevices: number;
+  onlineDevices: number;
+  offlineDevices: number;
+}
 
 export interface AdminDashboardData {
   systemMemory?: SystemMemory;
@@ -29,4 +34,5 @@ export interface AdminDashboardData {
   osCounts?: CountData[];
   browserCounts?: CountData[];
   validSessionsCount?: number;
+  deviceStats?: DeviceStatsDTO
 }

@@ -32,6 +32,7 @@ import { AccessLogsComponent } from './access-logs/access-logs.component';
 import { AddAdminDialogComponent } from './administradores/admin/add-admin-dialog.component';
 import { ChangePasswordDialogComponent } from './administradores/change-password-dialog/change-password-dialog.component';
 import { ConfirmDialogComponent } from './confirm/confirm-dialog/confirm-dialog.component';
+import { DevicesComponent } from './devices/devices.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ConfirmDialogComponent } from './confirm/confirm-dialog/confirm-dialog.
     AccessLogsComponent,
     AddAdminDialogComponent,
     ChangePasswordDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    DevicesComponent
   ],
   imports: [
     CommonModule,
