@@ -5,9 +5,9 @@
 }
 
 h1 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 1.875rem; /* 30px */
+  font-weight: 500;
+  color: #00164a;
   margin-bottom: 24px;
 }
 
@@ -22,7 +22,6 @@ h1 {
 
 .dashboard-grid {
   display: grid;
-  // Ajustado para um layout mais flexível
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
 }
@@ -30,14 +29,30 @@ h1 {
 .dashboard-card {
   border-radius: 12px;
   transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
 }
 
+.large-card {
+  @media (min-width: 1200px) {
+    grid-column: span 2; // Ocupa 2 colunas em telas maiores
+  }
+}
+
+mat-card-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .mat-card-header {
-  padding-bottom: 16px;
+  padding-bottom: 8px;
 }
 
 .card-title-container {
@@ -47,7 +62,7 @@ h1 {
   width: 100%;
 
   mat-icon {
-    color: #4b5563;
+    color: #6c757d; // Cor do ícone mais sutil
   }
 
   span {
@@ -60,14 +75,63 @@ h1 {
   justify-content: center;
 }
 
+// Estilo para métricas grandes (ex: Sessões Ativas)
 .metric {
   font-size: 3rem;
   font-weight: 700;
   text-align: center;
   color: #2563eb;
   line-height: 1;
-  padding-top: 16px;
 }
+
+// Estilo para cards de métricas de análise
+.metric-card {
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .metric-icon-container {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: white;
+      font-size: 28px;
+      height: 28px;
+      width: 28px;
+    }
+  }
+
+  .metric-details {
+    p {
+      margin: 0;
+      line-height: 1.2;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .metric-label {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  }
+}
+
+// Cores de fundo para cada ícone
+.icon-total { background-color: #3b82f6; } // Azul
+.icon-today { background-color: #22c55e; } // Verde
+.icon-connections { background-color: #f97316; } // Laranja
+.icon-macs { background-color: #6366f1; } // Indigo
 
 .system-info p {
   margin: 4px 0;
@@ -78,16 +142,14 @@ h1 {
   position: relative;
   height: 250px;
   width: 100%;
-  margin-top: 16px;
 }
 
-// Estilos para o novo card de estatísticas
+// Estilos para o card de estatísticas (Dispositivos, Duração Média)
 .stats-content {
   display: flex;
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  padding-top: 16px;
   width: 100%;
 }
 
@@ -98,23 +160,57 @@ h1 {
 }
 
 .stat-value {
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
 .stat-label {
   font-size: 0.875rem;
   color: #6c757d;
+  margin-top: 4px;
 }
 
-.stat-item.total .stat-value {
-  color: #1f2937;
-}
+.stat-item .green { color: #16a34a; }
+.stat-item .red { color: #dc2626; }
 
-.stat-item.online .stat-value {
-  color: #16a34a;
-}
+// Estilos para a lista de ranking
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
 
-.stat-item.offline .stat-value {
-  color: #dc2626;
+  li {
+    display: flex;
+    align-items: center;
+    padding: 12px 4px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .rank {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #6c757d;
+      width: 30px;
+      text-align: center;
+    }
+
+    .name {
+      flex-grow: 1;
+      padding: 0 12px;
+      font-weight: 500;
+      color: #374151;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .count {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+  }
 }

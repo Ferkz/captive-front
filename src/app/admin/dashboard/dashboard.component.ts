@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Chart, ChartConfiguration, ChartData } from 'chart.js';
 import {
   AdminDashboardData,
+  AnalyticsDashboardDTO,
   CountData,
   DeviceStatsDTO,
   SystemInfo,
@@ -15,6 +16,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const INFO_API_BASE_URL = `${environment.backendApiUrl}/api/admin/info`;
 const DEVICES_API_BASE_URL = `${environment.backendApiUrl}/api/admin/devices`;
+const ANALYTICS_API_BASE_URL = `${environment.backendApiUrl}/api/admin/analytics`;
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public osChartData!: ChartData<'doughnut'>;
   public browserChartData!: ChartData<'doughnut'>;
+  public newVsReturningChartData!: ChartData<'doughnut'>;
   public doughnutChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -93,6 +96,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       deviceStats: this.http.get<DeviceStatsDTO>(
         `${DEVICES_API_BASE_URL}/stats`
       ),
+      analytics: this.http.get<AnalyticsDashboardDTO>(`${ANALYTICS_API_BASE_URL}/summary`)
     })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
@@ -104,6 +108,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             osCounts: results.osCounts.payload,
             browserCounts: results.browserCounts.payload,
             deviceStats: results.deviceStats,
+            analytics: results.analytics,
           };
 
           this.prepareChartData();
@@ -131,20 +136,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         datasets: [
           {
             data: data,
-            backgroundColor: [
-              '#3b82f6',
-              '#ef4444',
-              '#22c55e',
-              '#eab308',
-              '#8b5cf6',
-            ],
-            hoverBackgroundColor: [
-              '#2563eb',
-              '#dc2626',
-              '#16a34a',
-              '#d97706',
-              '#7c3aed',
-            ],
+            backgroundColor: ['#3b82f6','#ef4444','#22c55e','#eab308','#8b5cf6'],
+            hoverBackgroundColor: ['#2563eb','#dc2626','#16a34a','#d97706','#7c3aed'],
             borderColor: '#ffffff',
             borderWidth: 2,
           },
@@ -168,24 +161,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         datasets: [
           {
             data: data,
-            backgroundColor: [
-              '#f97316',
-              '#06b6d4',
-              '#d946ef',
-              '#14b8a6',
-              '#64748b',
-            ],
-            hoverBackgroundColor: [
-              '#ea580c',
-              '#0891b2',
-              '#c026d3',
-              '#0d9488',
-              '#475569',
-            ],
+            backgroundColor: ['#f97316','#06b6d4','#d946ef','#14b8a6','#64748b'],
+            hoverBackgroundColor: ['#ea580c','#0891b2','#c026d3','#0d9488','#475569'],
             borderColor: '#ffffff',
             borderWidth: 2,
           },
         ],
+      };
+    }
+    if (this.dashboardData.analytics?.newVsReturning) {
+      const { newUsers, returningUsers } = this.dashboardData.analytics.newVsReturning;
+      this.newVsReturningChartData = {
+        labels: ['Novos Usuários', 'Usuários Recorrentes'],
+        datasets: [{
+          data: [newUsers, returningUsers],
+          backgroundColor: ['#34d399', '#60a5fa'],
+          hoverBackgroundColor: ['#10b981', '#3b82f6'],
+          borderColor: '#ffffff',
+          borderWidth: 2
+        }]
       };
     }
   }
@@ -198,6 +192,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
+
   ngOnDestroy(): void {
     Chart.unregister(ChartDataLabels);
     this.unsubscribe$.next();

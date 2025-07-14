@@ -11,6 +11,7 @@
   </div>
 
   <div *ngIf="!isLoading && !error" class="dashboard-grid">
+    <!-- Card: Sessões Ativas -->
     <mat-card class="dashboard-card">
       <mat-card-header>
         <mat-card-title class="card-title-container">
@@ -19,10 +20,11 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A'
-          }}</p>
+        <p class="metric">{{ dashboardData.validSessionsCount !== undefined ? dashboardData.validSessionsCount : 'N/A' }}</p>
       </mat-card-content>
     </mat-card>
+
+    <!-- Card: Dispositivos -->
     <mat-card class="dashboard-card" *ngIf="dashboardData.deviceStats">
       <mat-card-header>
         <mat-card-title class="card-title-container">
@@ -32,22 +34,21 @@
       </mat-card-header>
       <mat-card-content class="stats-content">
         <div class="stat-item total">
-          <span class="stat-label"><strong>Total: </strong></span>
           <span class="stat-value">{{ dashboardData.deviceStats.totalDevices }}</span>
-
+          <span class="stat-label">Total</span>
         </div>
         <div class="stat-item online">
-          <span class="stat-label"><strong>Online: </strong></span>
-          <span class="stat-value">{{ dashboardData.deviceStats.onlineDevices }}</span>
-
+          <span class="stat-value green">{{ dashboardData.deviceStats.onlineDevices }}</span>
+          <span class="stat-label">Online</span>
         </div>
         <div class="stat-item offline">
-
-          <span class="stat-label"><strong>Offline: </strong></span>
-          <span class="stat-value">{{ dashboardData.deviceStats.offlineDevices }}</span>
+          <span class="stat-value red">{{ dashboardData.deviceStats.offlineDevices }}</span>
+          <span class="stat-label">Offline</span>
         </div>
       </mat-card-content>
     </mat-card>
+
+    <!-- Card: Info do Sistema -->
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemInfo">
       <mat-card-header>
         <mat-card-title class="card-title-container">
@@ -58,11 +59,12 @@
       <mat-card-content class="system-info">
         <p><strong>Hostname:</strong> {{ dashboardData.systemInfo.hostname || 'N/A' }}</p>
         <p><strong>IP:</strong> {{ dashboardData.systemInfo.ipAddress || 'N/A' }}</p>
-        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{
-          dashboardData.systemInfo.operatingSystemVersion }}</p>
+        <p><strong>OS:</strong> {{ dashboardData.systemInfo.operatingSystem }} {{ dashboardData.systemInfo.operatingSystemVersion }}</p>
         <p><strong>Java:</strong> {{ dashboardData.systemInfo.javaVersion }}</p>
       </mat-card-content>
     </mat-card>
+
+    <!-- Card: Uso de Memória -->
     <mat-card class="dashboard-card" *ngIf="dashboardData.systemMemory">
       <mat-card-header>
         <mat-card-title class="card-title-container">
@@ -77,6 +79,104 @@
         <p><strong>Máxima:</strong> {{ formatBytes(dashboardData.systemMemory.max) }}</p>
       </mat-card-content>
     </mat-card>
+    <mat-card class="dashboard-card metric-card" *ngIf="dashboardData.analytics">
+      <mat-card-content>
+        <div class="metric-icon-container">
+          <mat-icon class="icon-total">group</mat-icon>
+        </div>
+        <div class="metric-details">
+          <p class="metric-value">{{ dashboardData.analytics?.totalRegisteredUsers }}</p>
+          <p class="metric-label">Total de Cadastros</p>
+        </div>
+      </mat-card-content>
+      <mat-card-content>
+        <div class="metric-icon-container">
+          <mat-icon class="icon-today">person_add</mat-icon>
+        </div>
+        <div class="metric-details">
+          <p class="metric-value">{{ dashboardData.analytics?.registeredToday }}</p>
+          <p class="metric-label">Cadastros Hoje</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
+
+    <mat-card class="dashboard-card metric-card" *ngIf="dashboardData.analytics">
+      <mat-card-content>
+        <div class="metric-icon-container">
+          <mat-icon class="icon-connections">power</mat-icon>
+        </div>
+        <div class="metric-details">
+          <p class="metric-value">{{ dashboardData.analytics?.connectionsToday }}</p>
+          <p class="metric-label">Conexões Hoje</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card metric-card" *ngIf="dashboardData.analytics">
+      <mat-card-content>
+        <div class="metric-icon-container">
+          <mat-icon class="icon-macs">devices</mat-icon>
+        </div>
+        <div class="metric-details">
+          <p class="metric-value">{{ dashboardData.analytics?.uniqueMacsToday }}</p>
+          <p class="metric-label">MACs Únicos Hoje</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="dashboard-card large-card" *ngIf="newVsReturningChartData">
+      <mat-card-header>
+        <mat-card-title class="card-title-container chart-title">
+          <mat-icon>people_alt</mat-icon>
+          <span>Novos vs. Recorrentes (Hoje)</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <canvas baseChart [data]="newVsReturningChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="dashboard-card large-card" *ngIf="dashboardData.analytics?.topUsersLast30Days?.length">
+      <mat-card-header>
+        <mat-card-title class="card-title-container">
+          <mat-icon>trending_up</mat-icon>
+          <span>Top Usuários (Últimos 30 dias)</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul class="ranking-list">
+          <li *ngFor="let user of dashboardData.analytics?.topUsersLast30Days; let i = index">
+            <span class="rank">{{ i + 1 }}</span>
+            <span class="name">{{ user.fullName }}</span>
+            <span class="count">{{ user.sessionCount }} sessões</span>
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="dashboard-card" *ngIf="dashboardData.analytics?.sessionTimeStats">
+       <mat-card-header>
+        <mat-card-title class="card-title-container">
+          <mat-icon>schedule</mat-icon>
+          <span>Duração Média das Sessões</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="stats-content">
+        <div class="stat-item">
+          <span class="stat-value">{{ dashboardData.analytics?.sessionTimeStats?.averageMinutes | number:'1.0-0' }}</span>
+          <span class="stat-label">Minutos (Média)</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value green">{{ dashboardData.analytics?.sessionTimeStats?.aboveAverageCount }}</span>
+          <span class="stat-label">Acima da Média</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value red">{{ dashboardData.analytics?.sessionTimeStats?.belowAverageCount }}</span>
+          <span class="stat-label">Abaixo da Média</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
     <mat-card class="dashboard-card" *ngIf="osChartData">
       <mat-card-header>
         <mat-card-title class="card-title-container chart-title">
@@ -86,11 +186,11 @@
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart [data]="osChartData" [options]="doughnutChartOptions" type="doughnut">
-          </canvas>
+          <canvas baseChart [data]="osChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
         </div>
       </mat-card-content>
     </mat-card>
+
     <mat-card class="dashboard-card" *ngIf="browserChartData">
       <mat-card-header>
         <mat-card-title class="card-title-container chart-title">
@@ -100,8 +200,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="chart-container">
-          <canvas baseChart [data]="browserChartData" [options]="doughnutChartOptions" type="doughnut">
-          </canvas>
+          <canvas baseChart [data]="browserChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
         </div>
       </mat-card-content>
     </mat-card>

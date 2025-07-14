@@ -27,7 +27,32 @@ export interface DeviceStatsDTO {
   onlineDevices: number;
   offlineDevices: number;
 }
+export interface UserRankingDTO {
+  fullName: string;
+  cpf: string;
+  sessionCount: number;
+}
 
+export interface NewVsReturningDTO {
+  newUsers: number;
+  returningUsers: number;
+}
+
+export interface SessionTimeStatsDTO {
+  averageMinutes: number;
+  aboveAverageCount: number;
+  belowAverageCount: number;
+}
+
+export interface AnalyticsDashboardDTO {
+    totalRegisteredUsers: number;
+    registeredToday: number;
+    uniqueMacsToday: number;
+    connectionsToday: number;
+    newVsReturning: NewVsReturningDTO;
+    sessionTimeStats: SessionTimeStatsDTO;
+    topUsersLast30Days: UserRankingDTO[];
+}
 export interface AdminDashboardData {
   systemMemory?: SystemMemory;
   systemInfo?: SystemInfo;
@@ -35,4 +60,5 @@ export interface AdminDashboardData {
   browserCounts?: CountData[];
   validSessionsCount?: number;
   deviceStats?: DeviceStatsDTO
+  analytics?: AnalyticsDashboardDTO;
 }
